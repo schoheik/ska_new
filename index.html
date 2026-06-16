@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skarabäus — Ska. Punk. Rock'n'Roll.</title>
+  <link rel="icon" type="image/png" href="res/logo/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    ::selection { background: #c62828; color: #fff; }
+
+    a { color: #ef4444; text-decoration: none; transition: color .2s; }
+    a:hover { color: #fff; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(10,10,10,.85); backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    nav .container { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+    .nav-logo-img { height: 40px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: .85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #999; }
+    .nav-links a:hover { color: #ef4444; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+      background: radial-gradient(ellipse at 30% 20%, #1a0a0a 0%, #0a0a0a 70%);
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 14vw, 10rem);
+      letter-spacing: 6px; line-height: 1; color: #fff;
+    }
+    .hero h1 span { color: #ef4444; }
+    .hero .tagline {
+      font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 700; text-transform: uppercase;
+      letter-spacing: 6px; margin-top: 8px; color: #666;
+    }
+    .hero .divider { width: 80px; height: 3px; background: #c62828; margin: 32px auto; }
+    .hero p { max-width: 520px; margin: 0 auto; color: #999; font-size: 1.05rem; }
+    .hero .btn {
+      display: inline-block; margin-top: 40px; padding: 14px 48px;
+      border: 2px solid #ef4444; color: #ef4444; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 2px; font-size: .85rem; transition: all .3s;
+    }
+    .hero .btn:hover { background: #ef4444; color: #0a0a0a; }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      color: #555; font-size: .75rem; text-transform: uppercase; letter-spacing: 2px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 120px 0; }
+    .section-label {
+      font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
+      color: #ef4444; margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: 2px; color: #fff; margin-bottom: 16px;
+    }
+    .section-desc { color: #888; max-width: 600px; margin-bottom: 64px; }
+
+    /* ── ABOUT ── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-text p + p { margin-top: 16px; }
+    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+    .stat { text-align: center; }
+    .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: #ef4444; }
+    .stat-label { font-size: .8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+    .about-image {
+      background: #141414; border-radius: 4px; height: 400px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #222; position: relative; overflow: hidden;
+    }
+    .about-image .placeholder-icon { font-size: 4rem; opacity: .15; }
+
+    /* ── SOCIAL ── */
+    #social { background: #0d0d0d; }
+    .social-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .social-card {
+      aspect-ratio: 1; background: #141414; border: 1px solid #222; border-radius: 4px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: border-color .3s, transform .3s; text-decoration: none; color: #e0e0e0;
+    }
+    .social-card:hover { border-color: #ef4444; transform: translateY(-4px); }
+    .social-card .icon { font-size: 3rem; margin-bottom: 12px; }
+    .social-card .name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; color: #fff; }
+    .social-card .handle { font-size: .85rem; color: #666; margin-top: 4px; }
+
+    /* ── TOUR ── */
+    #tour { background: #080808; }
+    .tour-list { display: flex; flex-direction: column; }
+    .tour-item {
+      display: grid; grid-template-columns: 100px 1fr; gap: 24px; align-items: center;
+      padding: 24px 0; border-bottom: 1px solid #1a1a1a; transition: background .2s; padding-left: 16px; padding-right: 16px;
+    }
+    .tour-item:hover { background: #0f0f0f; }
+    .tour-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: #ef4444; }
+    .tour-date .month { font-size: .75rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #666; display: block; text-transform: uppercase; letter-spacing: 1px; }
+    .tour-venue h4 { font-weight: 700; color: #fff; }
+    .tour-venue span { font-size: .85rem; color: #777; }
+    /* ── CONTACT ── */
+    #contact { background: #0d0d0d; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+    .social-links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
+    .social-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 24px; border: 1px solid #222; border-radius: 2px;
+      font-size: .85rem; font-weight: 600; color: #ccc; transition: all .3s;
+    }
+    .social-link:hover { border-color: #ef4444; color: #ef4444; background: #111; }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .contact-form input,
+    .contact-form textarea {
+      background: #141414; border: 1px solid #222; border-radius: 2px;
+      padding: 14px 16px; font-family: 'Inter', sans-serif; font-size: .9rem; color: #e0e0e0;
+      transition: border-color .3s;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus { outline: none; border-color: #ef4444; }
+    .contact-form textarea { min-height: 120px; resize: vertical; }
+    .contact-form button {
+      align-self: flex-start; padding: 14px 40px; background: #ef4444; border: none;
+      color: #0a0a0a; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+      font-size: .85rem; cursor: pointer; transition: opacity .3s;
+    }
+    .contact-form button:hover { opacity: .8; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 48px 24px; border-top: 1px solid #111;
+      font-size: .8rem; color: #444;
+    }
+    footer .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #555; letter-spacing: 2px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .tour-item { grid-template-columns: 1fr; gap: 8px; }
+      .about-stats { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAV ══ -->
+  <nav>
+    <div class="container">
+      <img src="res/logo/Logo_rot_schwarz.png" alt="Skarabäus" class="nav-logo-img">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#social">Social</a></li>
+        <li><a href="#tour">Tour</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>SKARA<span>BÄUS</span></h1>
+      <div class="tagline">Ska · Punk · Rock'n'Roll</div>
+      <div class="divider"></div>
+      <p>Three chords, a horn section, and no respect for silence. From the underground to your eardrums.</p>
+      <a href="#music" class="btn">Hear the noise</a>
+    </div>
+    <div class="scroll-hint">Scroll down</div>
+  </section>
+
+  <!-- ══ ABOUT ══ -->
+  <section id="about">
+    <div class="container">
+      <div class="section-label">About</div>
+      <div class="about-grid">
+        <div class="about-text">
+          <h2 class="section-title">The Beat Goes On</h2>
+          <p>Wir sind Skarabaeus! Wir spielen den besten Ska, Punk und Rock'n'Roll in ganz Franken! Wenn ihr unseren Musikstil erkunden wollt, dann geht doch auf unsere Social-Media Kanäle und hört und seht mal rein oder kommt einfach zu einem unserer Termine vorbei.
+Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands vereint, um die beste Band der Welt zu formen!</p>
+          <div class="about-stats">
+            <div class="stat">
+              <div class="stat-number">50+</div>
+              <div class="stat-label">Shows played</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">9</div>
+              <div class="stat-label">Musiker</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number">∞</div>
+              <div class="stat-label">Spaß</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="res/images/Band_Mercedes.JPG" alt="Skarabäus band photo" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SOCIAL ══ -->
+  <section id="social">
+    <div class="container">
+      <div class="section-label">Social</div>
+      <h2 class="section-title">Follow The Noise</h2>
+      <p class="section-desc">Catch us online — we're more active than on stage. Almost.</p>
+      <div class="social-grid">
+        <a href="https://instagram.com/skarabaeus" target="_blank" rel="noopener" class="social-card">
+          <div class="icon">📷</div>
+          <div class="name">Instagram</div>
+          <div class="handle">@skarabaeus</div>
+        </a>
+        <a href="https://youtube.com/@skarabaeus" target="_blank" rel="noopener" class="social-card">
+          <div class="icon">▶️</div>
+          <div class="name">YouTube</div>
+          <div class="handle">/skarabaeus</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ TOUR ══ -->
+  <section id="tour">
+    <div class="container">
+      <div class="section-label">Tour</div>
+      <h2 class="section-title">Catch Us Live</h2>
+      <p class="section-desc">If we're not playing, we're not happy. Come sweat with us.</p>
+      <div class="tour-list">
+        <div class="tour-item">
+          <div class="tour-date">28<span class="month">Jun</span></div>
+          <div class="tour-venue">
+            <h4>Blue Moon Theater</h4>
+            <span>Berlin, Germany</span>
+          </div>
+        </div>
+        <div class="tour-item">
+          <div class="tour-date">12<span class="month">Jul</span></div>
+          <div class="tour-venue">
+            <h4>Rockhouse</h4>
+            <span>Salzburg, Austria</span>
+          </div>
+        </div>
+        <div class="tour-item">
+          <div class="tour-date">03<span class="month">Aug</span></div>
+          <div class="tour-venue">
+            <h4>Punk Island Fest</h4>
+            <span>London, UK</span>
+          </div>
+        </div>
+        <div class="tour-item">
+          <div class="tour-date">19<span class="month">Aug</span></div>
+          <div class="tour-venue">
+            <h4>Kulturzentrum</h4>
+            <span>Hamburg, Germany</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ══ -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-label">Contact</div>
+      <div class="contact-grid">
+        <div>
+          <h2 class="section-title">Get In Touch</h2>
+          <p class="section-desc" style="margin-bottom:0">Booking, press, or just wanna say hi — we don't bite. Much.</p>
+          <div class="social-links">
+            <a href="#" class="social-link">Instagram</a>
+            <a href="#" class="social-link">YouTube</a>
+            <a href="#" class="social-link">Spotify</a>
+            <a href="#" class="social-link">Bandcamp</a>
+          </div>
+        </div>
+        <form class="contact-form">
+          <input type="text" placeholder="Your name">
+          <input type="email" placeholder="Your email">
+          <textarea placeholder="Your message"></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <div class="footer-logo">Skarabäus</div>
+    <p style="margin-top:8px">Stay loud. Stay reckless.</p>
+    <p style="margin-top:16px">&copy; 2026 Skarabäus. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // ── Smooth reveal on scroll ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: .1 });
+
+    document.querySelectorAll('section, .album, .tour-item').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = 'opacity .6s ease, transform .6s ease';
+      observer.observe(el);
+    });
+
+    // ── Contact form ──
+    document.querySelector('.contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thanks for reaching out! We\'ll get back to you between tours. 🤘');
+    });
+  </script>
+
+</body>
+</html>
