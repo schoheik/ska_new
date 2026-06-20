@@ -92,12 +92,7 @@
     .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: #ef4444; }
     .stat-label { font-size: .8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
-    .about-image {
-      background: #141414; border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      border: 1px solid #222; position: relative; overflow: hidden;
-    }
-    .band-wrapper { position: relative; display: inline-block; width: 100%; }
+    .band-wrapper { position: relative; display: inline-block; width: 100%; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
     #bandPhoto { max-width: 100%; display: block; }
     #highlight {
       position: absolute; border: 3px solid #ef4444;
@@ -267,23 +262,11 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
           </div>
         </div>
         <div class="band-wrapper" id="band-wrapper">
-          <img src="res/images/Band_Mercedes.JPG" usemap="#bandmap" id="bandPhoto" alt="Skarabäus">
+          <img src="res/images/Band_Mercedes.JPG" id="bandPhoto" alt="Skarabäus">
           <div id="highlight"></div>
         </div>
       </div>
     </div>
-
-    <map name="bandmap">
-      <area shape="rect" coords="20,340,340,1200" data-member="Niko">
-      <area shape="rect" coords="250,250,690,1365" data-member="Catcher">
-      <area shape="rect" coords="590,280,760,690" data-member="Jürgen">
-      <area shape="rect" coords="720,260,980,560" data-member="Stocki">
-      <area shape="rect" coords="900,120,1180,560" data-member="Lerry">
-      <area shape="rect" coords="1180,260,1380,560" data-member="Jürgen">
-      <area shape="rect" coords="1380,100,1770,650" data-member="Heiko">
-      <area shape="rect" coords="1680,220,2048,650" data-member="Dschembi">
-      <area shape="rect" coords="1290,560,1530,930" data-member="Ralf">
-    </map>
   </section>
 
   <!-- ══ BAND ══ -->
@@ -412,60 +395,62 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       });
     }, { threshold: .1 });
 
-    document.querySelectorAll('section, .member-card, .tour-item').forEach(el => {
+    document.querySelectorAll('section, .tour-item').forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(24px)';
       el.style.transition = 'opacity .6s ease, transform .6s ease';
       observer.observe(el);
     });
 
-    // ── Image map hover ──
+    // ── Band photo hover zones ──
+    const ZONES = [
+      { id:"Niko",     x:20,  y:340, w:320,  h:860 },
+      { id:"Catcher",  x:250, y:250, w:440,  h:1115 },
+      { id:"Jürgen",   x:590, y:280, w:170,  h:410 },
+      { id:"Stocki",   x:720, y:260, w:260,  h:300 },
+      { id:"Lerry",    x:900, y:120, w:280,  h:440 },
+      { id:"Jürgen",   x:1180,y:260, w:200,  h:300 },
+      { id:"Heiko",    x:1380,y:100, w:390,  h:550 },
+      { id:"Dschembi", x:1680,y:220, w:368,  h:430 },
+      { id:"Ralf",     x:1290,y:560, w:240,  h:370 }
+    ];
     const BASE_W = 2048;
     const highlight = document.getElementById('highlight');
     const bandPhoto = document.getElementById('bandPhoto');
+    let activeZone = null;
 
-    bandPhoto.addEventListener('load', () => {
-      const areas = document.querySelectorAll('area');
-      const imgNaturalW = bandPhoto.naturalWidth;
-      const baseScale = imgNaturalW / BASE_W;
+    function getScale() { return bandPhoto.offsetWidth / BASE_W; }
 
-      areas.forEach(area => {
-        area.addEventListener('mouseenter', () => {
-          const [x1, y1, x2, y2] = area.coords.split(',').map(Number);
-          const scale = bandPhoto.offsetWidth / BASE_W;
-          highlight.style.display = 'block';
-          highlight.style.left = (x1 * scale) + 'px';
-          highlight.style.top = (y1 * scale) + 'px';
-          highlight.style.width = ((x2 - x1) * scale) + 'px';
-          highlight.style.height = ((y2 - y1) * scale) + 'px';
-        });
-        area.addEventListener('mouseleave', () => {
-          highlight.style.display = 'none';
-        });
-        area.addEventListener('click', (e) => {
-          e.preventDefault();
-          const id = area.dataset.member;
-          if (id) openMember(id);
-        });
-      });
+    function updateHighlight(zone) {
+      if (!zone) { highlight.style.display = 'none'; activeZone = null; return; }
+      const s = getScale();
+      highlight.style.display = 'block';
+      highlight.style.left = (zone.x * s) + 'px';
+      highlight.style.top = (zone.y * s) + 'px';
+      highlight.style.width = (zone.w * s) + 'px';
+      highlight.style.height = (zone.h * s) + 'px';
+      activeZone = zone;
+    }
+
+    bandPhoto.addEventListener('mousemove', (e) => {
+      const rect = bandPhoto.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) / rect.width * BASE_W;
+      const my = (e.clientY - rect.top) / rect.height * BASE_W;
+      const zone = ZONES.find(z => mx >= z.x && mx <= z.x + z.w && my >= z.y && my <= z.y + z.h);
+      if (zone !== activeZone) updateHighlight(zone);
     });
-    if (bandPhoto.complete) bandPhoto.dispatchEvent(new Event('load'));
 
-    window.addEventListener('resize', () => {
-      if (highlight.style.display === 'block') {
-        const area = document.querySelector('area:hover');
-        if (area) {
-          const [x1, y1, x2, y2] = area.coords.split(',').map(Number);
-          const scale = bandPhoto.offsetWidth / BASE_W;
-          highlight.style.left = (x1 * scale) + 'px';
-          highlight.style.top = (y1 * scale) + 'px';
-          highlight.style.width = ((x2 - x1) * scale) + 'px';
-          highlight.style.height = ((y2 - y1) * scale) + 'px';
-        } else {
-          highlight.style.display = 'none';
-        }
-      }
+    bandPhoto.addEventListener('mouseleave', () => updateHighlight(null));
+
+    bandPhoto.addEventListener('click', (e) => {
+      const rect = bandPhoto.getBoundingClientRect();
+      const mx = (e.clientX - rect.left) / rect.width * BASE_W;
+      const my = (e.clientY - rect.top) / rect.height * BASE_W;
+      const zone = ZONES.find(z => mx >= z.x && mx <= z.x + z.w && my >= z.y && my <= z.y + z.h);
+      if (zone) openMember(zone.id);
     });
+
+    window.addEventListener('resize', () => { if (activeZone) updateHighlight(activeZone); });
 
     // ── Members ──
     const members = [
