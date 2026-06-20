@@ -93,11 +93,17 @@
     .stat-label { font-size: .8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
     .about-image {
-      background: #141414; border-radius: 4px; height: 400px;
+      background: #141414; border-radius: 4px;
       display: flex; align-items: center; justify-content: center;
       border: 1px solid #222; position: relative; overflow: hidden;
     }
-    .about-image .placeholder-icon { font-size: 4rem; opacity: .15; }
+    .band-wrapper { position: relative; display: inline-block; width: 100%; }
+    #bandPhoto { max-width: 100%; display: block; }
+    #highlight {
+      position: absolute; border: 3px solid #ef4444;
+      background: rgba(239,68,68,.2); display: none;
+      pointer-events: none; transition: .15s; border-radius: 2px;
+    }
 
     /* ── SOCIAL ── */
     #social { background: #0d0d0d; }
@@ -260,11 +266,24 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
             </div>
           </div>
         </div>
-        <div class="about-image">
-          <img src="res/images/Band_Mercedes.JPG" alt="Skarabäus band photo" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">
+        <div class="band-wrapper" id="band-wrapper">
+          <img src="res/images/Band_Mercedes.JPG" usemap="#bandmap" id="bandPhoto" alt="Skarabäus">
+          <div id="highlight"></div>
         </div>
       </div>
     </div>
+
+    <map name="bandmap">
+      <area shape="rect" coords="20,340,340,1200" data-member="Niko">
+      <area shape="rect" coords="250,250,690,1365" data-member="Catcher">
+      <area shape="rect" coords="590,280,760,690" data-member="Jürgen">
+      <area shape="rect" coords="720,260,980,560" data-member="Stocki">
+      <area shape="rect" coords="900,120,1180,560" data-member="Lerry">
+      <area shape="rect" coords="1180,260,1380,560" data-member="Jürgen">
+      <area shape="rect" coords="1380,100,1770,650" data-member="Heiko">
+      <area shape="rect" coords="1680,220,2048,650" data-member="Dschembi">
+      <area shape="rect" coords="1290,560,1530,930" data-member="Ralf">
+    </map>
   </section>
 
   <!-- ══ BAND ══ -->
@@ -398,6 +417,54 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       el.style.transform = 'translateY(24px)';
       el.style.transition = 'opacity .6s ease, transform .6s ease';
       observer.observe(el);
+    });
+
+    // ── Image map hover ──
+    const BASE_W = 2048;
+    const highlight = document.getElementById('highlight');
+    const bandPhoto = document.getElementById('bandPhoto');
+
+    bandPhoto.addEventListener('load', () => {
+      const areas = document.querySelectorAll('area');
+      const imgNaturalW = bandPhoto.naturalWidth;
+      const baseScale = imgNaturalW / BASE_W;
+
+      areas.forEach(area => {
+        area.addEventListener('mouseenter', () => {
+          const [x1, y1, x2, y2] = area.coords.split(',').map(Number);
+          const scale = bandPhoto.offsetWidth / BASE_W;
+          highlight.style.display = 'block';
+          highlight.style.left = (x1 * scale) + 'px';
+          highlight.style.top = (y1 * scale) + 'px';
+          highlight.style.width = ((x2 - x1) * scale) + 'px';
+          highlight.style.height = ((y2 - y1) * scale) + 'px';
+        });
+        area.addEventListener('mouseleave', () => {
+          highlight.style.display = 'none';
+        });
+        area.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = area.dataset.member;
+          if (id) openMember(id);
+        });
+      });
+    });
+    if (bandPhoto.complete) bandPhoto.dispatchEvent(new Event('load'));
+
+    window.addEventListener('resize', () => {
+      if (highlight.style.display === 'block') {
+        const area = document.querySelector('area:hover');
+        if (area) {
+          const [x1, y1, x2, y2] = area.coords.split(',').map(Number);
+          const scale = bandPhoto.offsetWidth / BASE_W;
+          highlight.style.left = (x1 * scale) + 'px';
+          highlight.style.top = (y1 * scale) + 'px';
+          highlight.style.width = ((x2 - x1) * scale) + 'px';
+          highlight.style.height = ((y2 - y1) * scale) + 'px';
+        } else {
+          highlight.style.display = 'none';
+        }
+      }
     });
 
     // ── Members ──
