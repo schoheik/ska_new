@@ -106,7 +106,7 @@
     .social-card {
       aspect-ratio: 1; background: #141414; border: 1px solid #222; border-radius: 4px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: border-color .3s, transform .3s; text-decoration: none; color: #e0e0e0;
+      transition: border-color .3s, transform .3s; text-decoration: none; color: #e0e0e0; overflow: hidden;
     }
     .social-card:hover { border-color: #ef4444; transform: translateY(-4px); }
     .social-card .icon { font-size: 3rem; margin-bottom: 12px; }
@@ -277,7 +277,8 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
           <div class="name">Instagram</div>
           <div class="handle">@skarabaeus</div>
         </a>
-        <a href="https://www.youtube.com/watch?v=R0bWuF-wyms" target="_blank" rel="noopener" class="social-card" style="background-image:url(https://img.youtube.com/vi/R0bWuF-wyms/maxresdefault.jpg);background-size:cover;background-position:center;position:relative;">
+        <a href="https://www.youtube.com/watch?v=R0bWuF-wyms" target="_blank" rel="noopener" class="social-card" style="position:relative;">
+          <img src="https://img.youtube.com/vi/R0bWuF-wyms/hqdefault.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
           <div style="position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;">
             <div class="icon">▶️</div>
             <div class="name">YouTube</div>
