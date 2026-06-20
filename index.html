@@ -272,10 +272,13 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       <h2 class="section-title">Follow The Noise</h2>
       <p class="section-desc">Catch us online — we're more active than on stage. Almost.</p>
       <div class="social-grid">
-        <a href="https://www.instagram.com/reel/DOQk8cdiGzV/" target="_blank" rel="noopener" class="social-card">
-          <div class="icon">📷</div>
-          <div class="name">Instagram</div>
-          <div class="handle">ASFHös</div>
+        <a href="https://www.instagram.com/reel/DOQk8cdiGzV/" target="_blank" rel="noopener" class="social-card ig-card" style="position:relative;">
+          <img src="" alt="" class="ig-thumb" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+          <div class="ig-fallback" style="display:flex;flex-direction:column;align-items:center;justify-content:center;position:absolute;inset:0;">
+            <div class="icon">📷</div>
+            <div class="name">Instagram</div>
+            <div class="handle">ASFHös</div>
+          </div>
         </a>
         <a href="https://www.youtube.com/watch?v=R0bWuF-wyms" target="_blank" rel="noopener" class="social-card" style="position:relative;">
           <img src="https://img.youtube.com/vi/R0bWuF-wyms/hqdefault.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
@@ -464,6 +467,23 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       e.preventDefault();
       alert('Thanks for reaching out! We\'ll get back to you between tours. 🤘');
     });
+
+    // ── Instagram thumbnail ──
+    {
+      const card = document.querySelector('.ig-card');
+      const img = card.querySelector('.ig-thumb');
+      const fallback = card.querySelector('.ig-fallback');
+      fetch('https://api.instagram.com/oembed?url=https://www.instagram.com/reel/DOQk8cdiGzV/')
+        .then(r => r.json())
+        .then(data => {
+          if (data.thumbnail_url) {
+            img.src = data.thumbnail_url;
+            img.style.display = 'block';
+            fallback.style.background = 'rgba(0,0,0,.5)';
+          }
+        })
+        .catch(() => {});
+    }
   </script>
 
 </body>
