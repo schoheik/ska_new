@@ -468,20 +468,27 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     });
 
     // ── Members ──
-    let members = [];
+    const members = [
+      {"id":"Heiko","name":"Heiko","instrument":"Gitarre, Gesang","photo":"res/images/members/heiko.JPG","bio":"Orchestermeister"},
+      {"id":"Alex","name":"Alex","instrument":"Gitarre","photo":"res/images/members/alex.JPG","bio":"Sieht gut aus"},
+      {"id":"Ralf","name":"Ralf","instrument":"Bass-Gitarre","photo":"res/images/members/ralf.JPG","bio":"Meister der Notenblätter"},
+      {"id":"Lerry","name":"Lerry","instrument":"Schlagzeug","photo":"res/images/members/lerry.JPG","bio":"Trommler"},
+      {"id":"Dschembi","name":"Dschembi","instrument":"Posaune","photo":"res/images/members/dschembi.JPG","bio":"Dschembi halt"},
+      {"id":"Stocki","name":"Stocki","instrument":"Trompete","photo":"res/images/members/stocki.JPG","bio":"Oddi 2.0"},
+      {"id":"Jürgen","name":"Jürgen","instrument":"Saxophons","photo":"res/images/members/jürgen.JPG","bio":"kann auch Blockflöte spielen"},
+      {"id":"Catcher","name":"Catcher","instrument":"Gesang, Trompete","photo":"res/images/members/catcher.JPG","bio":"Entertainer"},
+      {"id":"Niko","name":"Niko","instrument":"Gesang, Piano","photo":"res/images/members/niko.JPG","bio":"War schonmal im ZDF-Fernsehgarten"}
+    ];
 
-    fetch('members/all.json')
-      .then(r => r.json())
-      .then(data => {
-        members = data;
-        const grid = document.getElementById('members-grid');
-        grid.innerHTML = members.map(m => `
-          <div class="member-card" onclick="openMember('${m.id}')">
-            <img src="${m.photo}" alt="${m.name}" loading="lazy">
-            <div class="member-label">${m.name}</div>
-          </div>
-        `).join('');
-      });
+    {
+      const grid = document.getElementById('members-grid');
+      grid.innerHTML = members.map(m => `
+        <div class="member-card" onclick="openMember('${m.id}')">
+          <img src="${m.photo}" alt="${m.name}" loading="lazy">
+          <div class="member-label">${m.name}</div>
+        </div>
+      `).join('');
+    }
 
     function openMember(id) {
       const m = members.find(x => x.id.toLowerCase() === id.toLowerCase());
