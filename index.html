@@ -126,22 +126,6 @@
     .tour-venue h4 { font-weight: 700; color: #fff; }
     .tour-venue span { font-size: .85rem; color: #777; }
 
-    /* ── MEMBERS ── */
-    #members { background: #0d0d0d; }
-    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; }
-    .member-card {
-      aspect-ratio: 1; border-radius: 4px; overflow: hidden; cursor: pointer;
-      border: 1px solid #222; position: relative;
-      transition: border-color .3s, transform .3s;
-    }
-    .member-card:hover { border-color: #ef4444; transform: translateY(-4px); }
-    .member-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .member-card .member-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 8px 10px; background: rgba(0,0,0,.7);
-      font-size: .8rem; font-weight: 600; color: #fff;
-    }
-
     /* ── MODAL ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
@@ -217,7 +201,6 @@
       <img src="res/logo/Logo_rot_schwarz.png" alt="Skarabäus" class="nav-logo-img">
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
-        <li><a href="#members">Band</a></li>
         <li><a href="#social">Social</a></li>
         <li><a href="#tour">Tour</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -269,28 +252,18 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     </div>
   </section>
 
-  <!-- ══ BAND ══ -->
-  <section id="members">
-    <div class="container">
-      <div class="section-label">Besetzung</div>
-      <h2 class="section-title">Die Band</h2>
-      <p class="section-desc">Neun Verrückte, ein Ziel: euch zum Schwitzen zu bringen.</p>
-      <div class="members-grid" id="members-grid"></div>
-    </div>
-
-    <!-- ══ MODAL ══ -->
-    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
-      <div class="modal" id="modal" onclick="event.stopPropagation()">
-        <button class="modal-close" onclick="closeModal()">&times;</button>
-        <img class="modal-photo" id="modal-photo" src="" alt="">
-        <div class="modal-info">
-          <h3 class="modal-name" id="modal-name"></h3>
-          <p class="modal-instrument" id="modal-instrument"></p>
-          <p class="modal-bio" id="modal-bio"></p>
-        </div>
+  <!-- ══ MODAL ══ -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal" id="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <img class="modal-photo" id="modal-photo" src="" alt="">
+      <div class="modal-info">
+        <h3 class="modal-name" id="modal-name"></h3>
+        <p class="modal-instrument" id="modal-instrument"></p>
+        <p class="modal-bio" id="modal-bio"></p>
       </div>
     </div>
-  </section>
+  </div>
 
   <!-- ══ SOCIAL ══ -->
   <section id="social">
@@ -464,16 +437,6 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       {"id":"Catcher","name":"Catcher","instrument":"Gesang, Trompete","photo":"res/images/members/catcher.JPG","bio":"Entertainer"},
       {"id":"Niko","name":"Niko","instrument":"Gesang, Piano","photo":"res/images/members/niko.JPG","bio":"War schonmal im ZDF-Fernsehgarten"}
     ];
-
-    {
-      const grid = document.getElementById('members-grid');
-      grid.innerHTML = members.map(m => `
-        <div class="member-card" onclick="openMember('${m.id}')">
-          <img src="${m.photo}" alt="${m.name}" loading="lazy">
-          <div class="member-label">${m.name}</div>
-        </div>
-      `).join('');
-    }
 
     function openMember(id) {
       const m = members.find(x => x.id.toLowerCase() === id.toLowerCase());
