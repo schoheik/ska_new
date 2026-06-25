@@ -94,11 +94,13 @@
 
     .band-wrapper { position: relative; display: inline-block; width: 100%; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
     #bandPhoto { max-width: 100%; display: block; }
-    #highlight {
-      position: absolute; border: 3px solid #ef4444;
-      background: rgba(239,68,68,.2); display: none;
-      pointer-events: none; transition: .15s; border-radius: 2px;
+    .glow {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0; transition: opacity 0.2s;
+      pointer-events: none;
     }
+    .glow.show { opacity: 1; }
 
     /* ── SOCIAL ── */
     #social { background: #0d0d0d; }
@@ -245,8 +247,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
           </div>
         </div>
         <div class="band-wrapper" id="band-wrapper">
-          <img src="res/images/Band_Mercedes.JPG" id="bandPhoto" alt="Skarabäus">
-          <div id="highlight"></div>
+          <img src="res/images/hover/all.JPG" id="bandPhoto" alt="Skarabäus">
         </div>
       </div>
     </div>
@@ -378,55 +379,84 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       observer.observe(el);
     });
 
-    // ── Band photo hover zones ──
-    const ZONES = [
-      { id:"Niko",     x:20,  y:340, w:320,  h:860 },
-      { id:"Catcher",  x:250, y:250, w:440,  h:1115 },
-      { id:"Stocki",   x:590, y:280, w:170,  h:410 },
-      { id:"Jürgen",   x:720, y:260, w:260,  h:300 },
-      { id:"Lerry",    x:900, y:120, w:280,  h:440 },
-      { id:"Alex",   x:1180,y:260, w:200,  h:300 },
-      { id:"Heiko",    x:1380,y:100, w:390,  h:550 },
-      { id:"Dschembi", x:1680,y:220, w:368,  h:430 },
-      { id:"Ralf",     x:1290,y:560, w:240,  h:370 }
-    ];
-    const BASE_W = 2048;
-    const highlight = document.getElementById('highlight');
-    const bandPhoto = document.getElementById('bandPhoto');
-    let activeZone = null;
+    // ── Band photo hover zones (glow overlay) ──
+    const memberList = ['Alex','Catcher','Dschembi','Heiko','Jürgen','Lerry','Niko','Ralf','Stocki'];
+    const boxes = {
+      Alex:    { x:  779, y:   0, w: 1199, h: 1086 },
+      Catcher: { x:    0, y:   0, w: 1446, h: 1504 },
+      Dschembi:{ x: 1253, y:   0, w: 1003, h: 1311 },
+      Heiko:   { x:  977, y:   0, w: 1279, h: 1313 },
+      Jürgen:  { x:  193, y:   0, w: 1442, h: 1283 },
+      Lerry:   { x:  441, y:   0, w: 1364, h: 1122 },
+      Niko:    { x:    0, y:   0, w: 1041, h: 1504 },
+      Ralf:    { x:  827, y:  55, w: 1429, h: 1449 },
+      Stocki:  { x:  120, y:   0, w: 1351, h: 1237 }
+    };
+    const BG_W = 2256, BG_H = 1504;
 
-    function getScale() { return bandPhoto.offsetWidth / BASE_W; }
-
-    function updateHighlight(zone) {
-      if (!zone) { highlight.style.display = 'none'; activeZone = null; return; }
-      const s = getScale();
-      highlight.style.display = 'block';
-      highlight.style.left = (zone.x * s) + 'px';
-      highlight.style.top = (zone.y * s) + 'px';
-      highlight.style.width = (zone.w * s) + 'px';
-      highlight.style.height = (zone.h * s) + 'px';
-      activeZone = zone;
+    const centers = {};
+    for (const name of memberList) {
+      const b = boxes[name];
+      centers[name] = { cx: b.x + b.w / 2, cy: b.y + b.h / 2 };
     }
+
+    const bandPhoto = document.getElementById('bandPhoto');
+    const wrapper = document.getElementById('band-wrapper');
+    const glows = [];
+
+    memberList.forEach(name => {
+      const img = document.createElement('img');
+      img.className = 'glow';
+      img.src = 'res/images/hover/' + name + '_glow.png';
+      img.alt = '';
+      wrapper.appendChild(img);
+      glows.push({ el: img, name });
+    });
+
+    function hitTest(natX, natY) {
+      let best = -1;
+      let bestDist = Infinity;
+      for (let i = 0; i < memberList.length; i++) {
+        const name = memberList[i];
+        const b = boxes[name];
+        if (natX >= b.x && natX < b.x + b.w && natY >= b.y && natY < b.y + b.h) {
+          const c = centers[name];
+          const d = (natX - c.cx) ** 2 + (natY - c.cy) ** 2;
+          if (d < bestDist) {
+            bestDist = d;
+            best = i;
+          }
+        }
+      }
+      return best;
+    }
+
+    let activeIdx = -1;
 
     bandPhoto.addEventListener('mousemove', (e) => {
       const rect = bandPhoto.getBoundingClientRect();
-      const mx = (e.clientX - rect.left) / rect.width * BASE_W;
-      const my = (e.clientY - rect.top) / rect.height * BASE_W;
-      const zone = ZONES.find(z => mx >= z.x && mx <= z.x + z.w && my >= z.y && my <= z.y + z.h);
-      if (zone !== activeZone) updateHighlight(zone);
+      const x = Math.floor((e.clientX - rect.left) / rect.width * BG_W);
+      const y = Math.floor((e.clientY - rect.top) / rect.height * BG_H);
+      const idx = hitTest(x, y);
+      if (idx !== activeIdx) {
+        activeIdx = idx;
+        glows.forEach(g => g.el.classList.toggle('show', g.name === memberList[idx]));
+        bandPhoto.style.cursor = idx >= 0 ? 'pointer' : 'default';
+      }
     });
 
-    bandPhoto.addEventListener('mouseleave', () => updateHighlight(null));
+    bandPhoto.addEventListener('mouseleave', () => {
+      activeIdx = -1;
+      glows.forEach(g => g.el.classList.remove('show'));
+    });
 
     bandPhoto.addEventListener('click', (e) => {
       const rect = bandPhoto.getBoundingClientRect();
-      const mx = (e.clientX - rect.left) / rect.width * BASE_W;
-      const my = (e.clientY - rect.top) / rect.height * BASE_W;
-      const zone = ZONES.find(z => mx >= z.x && mx <= z.x + z.w && my >= z.y && my <= z.y + z.h);
-      if (zone) openMember(zone.id);
+      const x = Math.floor((e.clientX - rect.left) / rect.width * BG_W);
+      const y = Math.floor((e.clientY - rect.top) / rect.height * BG_H);
+      const idx = hitTest(x, y);
+      if (idx >= 0) openMember(memberList[idx]);
     });
-
-    window.addEventListener('resize', () => { if (activeZone) updateHighlight(activeZone); });
 
     // ── Members ──
     const members = [
