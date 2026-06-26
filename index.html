@@ -41,13 +41,13 @@
       background: #0a0a0a;
     }
     .hero-bg {
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; z-index: 0;
       background: url('res/images/mobil_stairs.JPG') center/cover no-repeat;
       background-position: center 20%;
       opacity: .5;
     }
     .hero::after {
-      content: ''; position: absolute; inset: 0;
+      content: ''; position: absolute; inset: 0; z-index: 0;
       background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
       pointer-events: none;
     }
@@ -179,7 +179,7 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .nav-links { display: none; }
+      nav { display: none; }
 
       .contact-grid { grid-template-columns: 1fr; }
       .tour-item { grid-template-columns: 1fr; gap: 8px; }
