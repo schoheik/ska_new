@@ -29,8 +29,7 @@
       background: rgba(10,10,10,.85); backdrop-filter: blur(8px);
       border-bottom: 1px solid rgba(255,255,255,.05);
     }
-    nav .container { display: flex; justify-content: space-between; align-items: center; height: 64px; }
-    .nav-logo-img { height: 40px; width: auto; display: block; }
+    nav .container { display: flex; justify-content: center; align-items: center; height: 64px; }
     .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-links a { font-size: .85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #999; }
     .nav-links a:hover { color: #ef4444; }
@@ -47,23 +46,10 @@
       pointer-events: none;
     }
     .hero-content { position: relative; z-index: 1; }
-    .hero h1 {
-      font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 14vw, 10rem);
-      letter-spacing: 6px; line-height: 1; color: #fff;
+    .hero-logo {
+      max-width: min(90vw, 700px); height: auto;
+      display: block; margin: 0 auto;
     }
-    .hero h1 span { color: #ef4444; }
-    .hero .tagline {
-      font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 700; text-transform: uppercase;
-      letter-spacing: 6px; margin-top: 8px; color: #666;
-    }
-    .hero .divider { width: 80px; height: 3px; background: #c62828; margin: 32px auto; }
-    .hero p { max-width: 520px; margin: 0 auto; color: #999; font-size: 1.05rem; }
-    .hero .btn {
-      display: inline-block; margin-top: 40px; padding: 14px 48px;
-      border: 2px solid #ef4444; color: #ef4444; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 2px; font-size: .85rem; transition: all .3s;
-    }
-    .hero .btn:hover { background: #ef4444; color: #0a0a0a; }
 
     .scroll-hint {
       position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
@@ -223,7 +209,6 @@
   <!-- ══ NAV ══ -->
   <nav>
     <div class="container">
-      <img src="res/logo/Logo_no_background.png" alt="Skarabäus" class="nav-logo-img">
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#social">Social Media</a></li>
@@ -236,11 +221,7 @@
   <!-- ══ HERO ══ -->
   <section class="hero" id="home">
     <div class="hero-content">
-      <h1>SKARA<span>BÄUS</span></h1>
-      <div class="tagline">Ska · Punk · Rock'n'Roll</div>
-      <div class="divider"></div>
-      <p>9 Musiker. Viel Brass. Noch mehr Spaß</p>
-      <a href="#social" class="btn">Social Media</a>
+      <img src="res/logo/Logo_no_background.png" alt="Skarabäus" class="hero-logo">
     </div>
     <div class="scroll-hint">Scroll down</div>
   </section>
