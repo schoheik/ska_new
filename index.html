@@ -85,7 +85,7 @@
     .section-desc { color: #888; max-width: 600px; margin-bottom: 64px; }
 
     /* ── ABOUT ── */
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-grid { display: flex; flex-direction: column; gap: 48px; }
     .about-text p + p { margin-top: 16px; }
     .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
     .stat { text-align: center; }
@@ -188,7 +188,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .nav-links { display: none; }
-      .about-grid { grid-template-columns: 1fr; }
+
       .contact-grid { grid-template-columns: 1fr; }
       .tour-item { grid-template-columns: 1fr; gap: 8px; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
@@ -247,7 +247,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
           </div>
         </div>
         <div class="band-wrapper" id="band-wrapper">
-          <img src="res/images/hover/all.JPG" id="bandPhoto" alt="Skarabäus">
+          <img src="res/images/hover_bridge/hover_bridge_all.png" id="bandPhoto" alt="Skarabäus">
         </div>
       </div>
     </div>
@@ -380,19 +380,19 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     });
 
     // ── Band photo hover zones (glow overlay) ──
-    const memberList = ['Alex','Catcher','Dschembi','Heiko','Jürgen','Lerry','Niko','Ralf','Stocki'];
+    const memberList = ['alex','catcher','dschembi','heiko','jürgen','lerry','niko','ralf','stocki'];
     const boxes = {
-      Alex:    { x:  779, y:   0, w: 1199, h: 1086 },
-      Catcher: { x:    0, y:   0, w: 1446, h: 1504 },
-      Dschembi:{ x: 1253, y:   0, w: 1003, h: 1311 },
-      Heiko:   { x:  977, y:   0, w: 1279, h: 1313 },
-      Jürgen:  { x:  193, y:   0, w: 1442, h: 1283 },
-      Lerry:   { x:  441, y:   0, w: 1364, h: 1122 },
-      Niko:    { x:    0, y:   0, w: 1041, h: 1504 },
-      Ralf:    { x:  827, y:  55, w: 1429, h: 1449 },
-      Stocki:  { x:  120, y:   0, w: 1351, h: 1237 }
+      alex:    { x:  42, y: 346, w: 282, h: 786 },
+      catcher: { x: 868, y: 340, w: 256, h: 840 },
+      dschembi:{ x: 254, y: 326, w: 252, h: 822 },
+      heiko:   { x:1568, y: 334, w: 254, h: 878 },
+      jürgen:  { x:1778, y: 290, w: 304, h: 940 },
+      lerry:   { x:1068, y: 318, w: 260, h: 854 },
+      niko:    { x: 644, y: 326, w: 266, h: 844 },
+      ralf:    { x: 446, y: 344, w: 258, h: 806 },
+      stocki:  { x:1304, y: 326, w: 292, h: 882 }
     };
-    const BG_W = 2256, BG_H = 1504;
+    const BG_W = 2256, BG_H = 1248;
 
     const centers = {};
     for (const name of memberList) {
@@ -407,7 +407,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     memberList.forEach(name => {
       const img = document.createElement('img');
       img.className = 'glow';
-      img.src = 'res/images/hover/' + name + '_glow.png';
+      img.src = 'res/images/hover_bridge/' + name + '_hover.png';
       img.alt = '';
       wrapper.appendChild(img);
       glows.push({ el: img, name });
