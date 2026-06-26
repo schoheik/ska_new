@@ -43,7 +43,7 @@
     .hero-bg {
       position: absolute; inset: 0; z-index: 0;
       background: url('res/images/mobil_stairs.JPG') center/cover no-repeat;
-      background-position: center 20%;
+      background-position: center 10%;
       opacity: .5;
     }
     .hero::after {
@@ -55,6 +55,7 @@
     .hero-logo {
       max-width: min(90vw, 700px); height: auto;
       display: block; margin: 0 auto;
+      transform: translateY(-10%);
     }
 
     .scroll-hint {
@@ -180,6 +181,8 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { display: none; }
+      .hero { min-height: 80vh; }
+      .hero-logo { max-width: min(80vw, 400px); }
 
       .contact-grid { grid-template-columns: 1fr; }
       .tour-item { grid-template-columns: 1fr; gap: 8px; }
