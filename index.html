@@ -46,12 +46,7 @@
       background-position: center 10%;
       opacity: .5;
     }
-    @media (max-width: 768px) {
-      .hero-bg {
-        background-image: url('res/images/mobil_green.JPG');
-        background-position: center 50%;
-      }
-    }
+
     .hero::after {
       content: ''; position: absolute; inset: 0; z-index: 0;
       background: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
@@ -293,36 +288,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       <div class="section-label">Tour</div>
       <h2 class="section-title">Nächste Konzerte</h2>
       <p class="section-desc">Wir freuen uns auf euch.</p>
-      <div class="tour-list">
-        <div class="tour-item">
-          <div class="tour-date">28<span class="month">Jun</span></div>
-          <div class="tour-venue">
-            <h4>Blue Moon Theater</h4>
-            <span>Berlin, Germany</span>
-          </div>
-        </div>
-        <div class="tour-item">
-          <div class="tour-date">12<span class="month">Jul</span></div>
-          <div class="tour-venue">
-            <h4>Rockhouse</h4>
-            <span>Salzburg, Austria</span>
-          </div>
-        </div>
-        <div class="tour-item">
-          <div class="tour-date">03<span class="month">Aug</span></div>
-          <div class="tour-venue">
-            <h4>Punk Island Fest</h4>
-            <span>London, UK</span>
-          </div>
-        </div>
-        <div class="tour-item">
-          <div class="tour-date">19<span class="month">Aug</span></div>
-          <div class="tour-venue">
-            <h4>Kulturzentrum</h4>
-            <span>Hamburg, Germany</span>
-          </div>
-        </div>
-      </div>
+      <div class="tour-list" id="tour-list"></div>
     </div>
   </section>
 
@@ -357,6 +323,20 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
   </footer>
 
   <script>
+    // ── Random mobile hero background ──
+    (function() {
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        var images = [
+          { src: 'res/images/mobil_stairs.JPG', pos: 'center 10%' },
+          { src: 'res/images/mobil_green.JPG',  pos: 'center 50%' }
+        ];
+        var pick = images[Math.floor(Math.random() * images.length)];
+        var bg = document.querySelector('.hero-bg');
+        bg.style.backgroundImage = 'url("' + pick.src + '")';
+        bg.style.backgroundPosition = pick.pos;
+      }
+    })();
+
     // ── Smooth reveal on scroll ──
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -367,12 +347,13 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       });
     }, { threshold: .1 });
 
-    document.querySelectorAll('section, .tour-item').forEach(el => {
+    function observeEl(el) {
       el.style.opacity = '0';
       el.style.transform = 'translateY(24px)';
       el.style.transition = 'opacity .6s ease, transform .6s ease';
       observer.observe(el);
-    });
+    }
+    document.querySelectorAll('section').forEach(observeEl);
 
     // ── Band photo hover zones (glow overlay) ──
     const memberList = ['alex','catcher','dschembi','heiko','jürgen','lerry','niko','ralf','stocki'];
@@ -483,6 +464,43 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // ── Tour dates from CSV ──
+    (function() {
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var list = document.getElementById('tour-list');
+      function renderRows(csvText) {
+        var lines = csvText.trim().split('\n');
+        for (var i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          var parts = lines[i].split(';');
+          var date = parts[0], location = parts[1], info = parts[2], link = parts[3];
+          if (!date || !location || !info) continue;
+          var dm = date.trim().split('.');
+          var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10);
+          var item = document.createElement('a');
+          item.className = 'tour-item';
+          item.style.textDecoration = 'none';
+          item.style.color = 'inherit';
+          item.style.display = 'grid';
+          if (link) item.href = link.indexOf('://') === -1 ? 'https://' + link : link;
+          item.target = '_blank';
+          item.rel = 'noopener';
+          item.innerHTML =
+            '<div class="tour-date">' + d + '<span class="month">' + months[m - 1] + '</span></div>' +
+            '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span></div>';
+          list.appendChild(item);
+          observeEl(item);
+        }
+      }
+      fetch('res/tour.csv')
+        .then(function(r) { return r.text(); })
+        .then(renderRows)
+        .catch(function() {
+          // fallback for file:// protocol
+          renderRows('Date;Location;Info;Link\n12.02.1991;Bamberg;Heiko\'s Birthday;www.google.de\n24.12.0001;Jerusalem;Jesus Birthday;www.gott.de');
+        });
+    })();
 
     // ── Contact form ──
     document.querySelector('.contact-form').addEventListener('submit', (e) => {
