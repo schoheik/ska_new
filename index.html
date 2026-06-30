@@ -65,9 +65,10 @@
       animation: bounce 2s infinite;
     }
     @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     /* ── SECTION COMMON ── */
-    section { padding: 120px 0; }
+    section { padding: 60px 0; }
     .section-label {
       font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
       color: #ef4444; margin-bottom: 8px;
@@ -84,6 +85,7 @@
     .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
     .stat { text-align: center; }
     .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: #ef4444; }
+    .stat-number.spin { animation: spin 1.5s linear infinite; display: inline-block; }
     .stat-label { font-size: .8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
     .band-wrapper { position: relative; display: inline-block; width: 100%; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
@@ -205,6 +207,7 @@
 
       .contact-grid { grid-template-columns: 1fr; }
       .tour-wrapper { grid-template-columns: 1fr; }
+      .tour-flyer { min-height: 0; }
       .tour-item { grid-template-columns: 1fr; gap: 8px; }
       .tour-accordion.open { display: grid; }
       .tour-accordion img { max-width: 300px; }
@@ -246,11 +249,11 @@
 Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands vereint, um die beste Band der Welt zu formen!</p>
           <div class="about-stats">
             <div class="stat">
-              <div class="stat-number">50+</div>
+              <div class="stat-number" data-count="50" data-suffix="+">0</div>
               <div class="stat-label">Shows played</div>
             </div>
             <div class="stat">
-              <div class="stat-number">9</div>
+              <div class="stat-number" data-count="9">0</div>
               <div class="stat-label">Musiker</div>
             </div>
             <div class="stat">
@@ -384,6 +387,68 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       observer.observe(el);
     }
     document.querySelectorAll('section').forEach(observeEl);
+
+    // ── About stats counter ──
+    (function() {
+      var statsEl = document.querySelector('.about-stats');
+      if (!statsEl) return;
+      var statNumbers = statsEl.querySelectorAll('.stat-number');
+      var counted = false;
+
+      function runCounter() {
+        if (counted) return;
+        counted = true;
+        var items = [];
+        statNumbers.forEach(function(el) {
+          var count = el.getAttribute('data-count');
+          var suffix = el.getAttribute('data-suffix') || '';
+          items.push({ el: el, target: parseInt(count, 10), suffix: suffix, isInfinity: count === null });
+        });
+        var duration = 880;
+        var gap = 500;
+        var maxFinish = 0;
+        var infinityEl = null;
+        items.forEach(function(item, i) {
+          if (item.isInfinity) {
+            infinityEl = item.el;
+          } else {
+            var finish = i * gap + duration;
+            if (finish > maxFinish) maxFinish = finish;
+          }
+        });
+        if (infinityEl) {
+          infinityEl.textContent = '\u221E';
+          infinityEl.classList.add('spin');
+        }
+        items.forEach(function(item, i) {
+          var delay = i * gap;
+          if (item.isInfinity) return;
+          setTimeout(function() {
+            var start = null;
+            function frame(ts) {
+              if (!start) start = ts;
+              var p = Math.min((ts - start) / duration, 1);
+              item.el.textContent = Math.floor(p * item.target) + item.suffix;
+              if (p < 1) requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+          }, delay);
+        });
+        if (infinityEl) {
+          setTimeout(function() { infinityEl.classList.remove('spin'); }, maxFinish);
+        }
+      }
+
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            runCounter();
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      obs.observe(statsEl);
+    })();
 
     // ── Band photo hover zones (glow overlay) ──
     const memberList = ['alex','catcher','dschembi','heiko','jürgen','lerry','niko','ralf','stocki'];
