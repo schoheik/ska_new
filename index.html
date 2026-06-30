@@ -667,10 +667,18 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
                 if (activeRow && activeRow !== row) activeRow.classList.remove('active');
                 activeRow = acc.classList.contains('open') ? row : null;
               } else {
-                if (activeRow) activeRow.classList.remove('active');
-                row.classList.add('active');
-                activeRow = row;
-                showFlyer(dt, loc, inf, l, f);
+                if (activeRow === row) {
+                  activeRow.classList.remove('active');
+                  activeRow = null;
+                  flyerPanel.classList.remove('active');
+                  flyerImg.style.display = 'none';
+                  flyerInfo.style.display = 'none';
+                } else {
+                  if (activeRow) activeRow.classList.remove('active');
+                  row.classList.add('active');
+                  activeRow = row;
+                  showFlyer(dt, loc, inf, l, f);
+                }
               }
             });
           })(item, accordion, date, location, info, link, flyer);
@@ -680,6 +688,15 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       }
 
       parseRows(tourData);
+
+      flyerPanel.addEventListener('click', function(e) {
+        if (e.target.closest('a')) return;
+        if (activeRow) activeRow.classList.remove('active');
+        activeRow = null;
+        flyerPanel.classList.remove('active');
+        flyerImg.style.display = 'none';
+        flyerInfo.style.display = 'none';
+      });
     })();
 
     // ── Contact form ──
