@@ -111,16 +111,30 @@
 
     /* ── TOUR ── */
     #tour { background: #080808; }
+    .tour-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
     .tour-list { display: flex; flex-direction: column; }
     .tour-item {
       display: grid; grid-template-columns: 100px 1fr; gap: 24px; align-items: center;
-      padding: 24px 0; border-bottom: 1px solid #1a1a1a; transition: background .2s; padding-left: 16px; padding-right: 16px;
+      padding: 24px 0; border-bottom: 1px solid #1a1a1a; transition: background .2s; padding-left: 16px; padding-right: 16px; cursor: pointer;
     }
     .tour-item:hover { background: #0f0f0f; }
+    .tour-item.active { background: #141414; border-left: 3px solid #ef4444; padding-left: 13px; }
     .tour-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: #ef4444; }
     .tour-date .month { font-size: .75rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #666; display: block; text-transform: uppercase; letter-spacing: 1px; }
     .tour-venue h4 { font-weight: 700; color: #fff; }
     .tour-venue span { font-size: .85rem; color: #777; }
+    .tour-flyer {
+      position: sticky; top: 80px; min-height: 120px;
+    }
+    .tour-flyer.active {
+      border: 1px solid #222; border-radius: 4px;
+      overflow: hidden; background: #111;
+    }
+    .tour-flyer-img { width: 100%; display: block; }
+    .tour-flyer-info { padding: 16px 20px; border-top: 1px solid #222; }
+    .tour-flyer-info h4 { color: #fff; font-weight: 700; }
+    .tour-flyer-info span { color: #777; font-size: .85rem; }
+    .tour-flyer-info a { display: inline-block; margin-top: 8px; font-size: .85rem; color: #ef4444; }
 
     /* ── MODAL ── */
     .modal-overlay {
@@ -184,6 +198,7 @@
       nav { display: none; }
 
       .contact-grid { grid-template-columns: 1fr; }
+      .tour-wrapper { grid-template-columns: 1fr; }
       .tour-item { grid-template-columns: 1fr; gap: 8px; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
     }
@@ -288,7 +303,13 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       <div class="section-label">Tour</div>
       <h2 class="section-title">Nächste Konzerte</h2>
       <p class="section-desc">Wir freuen uns auf euch.</p>
-      <div class="tour-list" id="tour-list"></div>
+      <div class="tour-wrapper">
+        <div class="tour-list" id="tour-list"></div>
+        <div class="tour-flyer" id="tour-flyer">
+          <img class="tour-flyer-img" id="tour-flyer-img" src="" alt="" style="display:none;">
+          <div class="tour-flyer-info" id="tour-flyer-info" style="display:none;"></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -322,6 +343,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     <p style="margin-top:16px">&copy; 2026 Skarabäus. All rights reserved.</p>
   </footer>
 
+  <script src="res/tour.data.js"></script>
   <script>
     // ── Random mobile hero background ──
     (function() {
@@ -469,37 +491,57 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     (function() {
       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       var list = document.getElementById('tour-list');
-      function renderRows(csvText) {
+      var flyerPanel = document.getElementById('tour-flyer');
+      var flyerImg = document.getElementById('tour-flyer-img');
+      var flyerInfo = document.getElementById('tour-flyer-info');
+      var activeRow = null;
+
+      function showFlyer(date, location, info, link, flyer) {
+        if (flyer && flyer.trim()) {
+          flyerPanel.classList.add('active');
+          flyerImg.src = 'res/images/events/' + flyer.trim();
+          flyerImg.style.display = 'block';
+          flyerInfo.style.display = 'block';
+          flyerInfo.innerHTML = '<h4>' + info.trim() + '</h4><span>' + location.trim() + ' — ' + date.trim() + '</span>';
+          if (link && link.trim()) {
+            var href = link.indexOf('://') === -1 ? 'https://' + link : link;
+            flyerInfo.innerHTML += '<br><a href="' + href + '" target="_blank" rel="noopener">→ Event-Seite</a>';
+          }
+        } else {
+          flyerPanel.classList.remove('active');
+          flyerImg.style.display = 'none';
+          flyerInfo.style.display = 'none';
+        }
+      }
+
+      function parseRows(csvText) {
         var lines = csvText.trim().split('\n');
         for (var i = 1; i < lines.length; i++) {
           if (!lines[i].trim()) continue;
           var parts = lines[i].split(';');
-          var date = parts[0], location = parts[1], info = parts[2], link = parts[3];
+          var date = parts[0], location = parts[1], info = parts[2], link = parts[3], flyer = parts[4];
           if (!date || !location || !info) continue;
           var dm = date.trim().split('.');
           var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10);
-          var item = document.createElement('a');
+          var item = document.createElement('div');
           item.className = 'tour-item';
-          item.style.textDecoration = 'none';
-          item.style.color = 'inherit';
-          item.style.display = 'grid';
-          if (link) item.href = link.indexOf('://') === -1 ? 'https://' + link : link;
-          item.target = '_blank';
-          item.rel = 'noopener';
           item.innerHTML =
             '<div class="tour-date">' + d + '<span class="month">' + months[m - 1] + '</span></div>' +
             '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span></div>';
+          (function(row, dt, loc, inf, l, f) {
+            row.addEventListener('click', function() {
+              if (activeRow) activeRow.classList.remove('active');
+              row.classList.add('active');
+              activeRow = row;
+              showFlyer(dt, loc, inf, l, f);
+            });
+          })(item, date, location, info, link, flyer);
           list.appendChild(item);
           observeEl(item);
         }
       }
-      fetch('res/tour.csv')
-        .then(function(r) { return r.text(); })
-        .then(renderRows)
-        .catch(function() {
-          // fallback for file:// protocol
-          renderRows('Date;Location;Info;Link\n12.02.1991;Bamberg;Heiko\'s Birthday;www.google.de\n24.12.0001;Jerusalem;Jesus Birthday;www.gott.de');
-        });
+
+      parseRows(tourData);
     })();
 
     // ── Contact form ──

@@ -1,0 +1,65 @@
+[
+    {
+        "id": "Heiko",
+        "name": "Heiko",
+        "instrument": "Gitarre, Gesang",
+        "photo": "res/images/members/heiko.JPG",
+        "bio": "Orchestermeister und Streber."
+    },
+    {
+        "id": "Alex",
+        "name": "Alex",
+        "instrument": "Gitarre",
+        "photo": "res/images/members/alex.JPG",
+        "bio": "Sieht gut aus und kann ein Liederbuch voller Schlager auswendig spielen."
+    },
+    {
+        "id": "Ralf",
+        "name": "Ralf",
+        "instrument": "Bass-Gitarre",
+        "photo": "res/images/members/ralf.JPG",
+        "bio": "Meister der Notenblätter. Lässt seine Finger auf 4 Saiten tanzen."
+    },
+    {
+        "id": "Lerry",
+        "name": "Lerry",
+        "instrument": "Schlagzeug",
+        "photo": "res/images/members/lerry.JPG",
+        "bio": "Als Posaunist falsch abgebogen. Sitzt jetzt hinter den Trommeln."
+    },
+    {
+        "id": "Dschembi",
+        "name": "Dschembi",
+        "instrument": "Posaune",
+        "photo": "res/images/members/dschembi.JPG",
+        "bio": "Absoluter Ruhepol der Band. Außer beim Posaunensolo."
+    },
+    {
+        "id": "Stocki",
+        "name": "Stocki",
+        "instrument": "Trompete",
+        "photo": "res/images/members/stocki.JPG",
+        "bio": "Oddi 2.0 -> kommt bis zum c3"
+    },
+    {
+        "id": "Jürgen",
+        "name": "Jürgen",
+        "instrument": "Saxophons",
+        "photo": "res/images/members/jürgen.JPG",
+        "bio": "kann auch Blockflöte spielen"
+    },
+    {
+        "id": "Catcher",
+        "name": "Catcher",
+        "instrument": "Gesang, Trompete",
+        "photo": "res/images/members/catcher.JPG",
+        "bio": "Entertainer und Sexsymbol der Band."
+    },
+    {
+        "id": "Niko",
+        "name": "Niko",
+        "instrument": "Gesang, Piano",
+        "photo": "res/images/members/niko.JPG",
+        "bio": "War schonmal im ZDF-Fernsehgarten. Hat die Karriere in einer Boyband nur knapp verpasst."
+    }
+]
