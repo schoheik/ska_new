@@ -135,6 +135,12 @@
     .tour-flyer-info h4 { color: #fff; font-weight: 700; }
     .tour-flyer-info span { color: #777; font-size: .85rem; }
     .tour-flyer-info a { display: inline-block; margin-top: 8px; font-size: .85rem; color: #ef4444; }
+    .tour-accordion { display: none; grid-column: 1 / -1; padding: 16px 0 8px; gap: 16px; align-items: start; }
+    .tour-accordion img { width: 100%; display: block; border-radius: 4px; }
+    .tour-accordion-info { padding: 4px 0; }
+    .tour-accordion-info h4 { color: #fff; font-weight: 700; font-size: 1rem; }
+    .tour-accordion-info span { color: #777; font-size: .85rem; display: block; margin-top: 4px; }
+    .tour-accordion-info a { display: inline-block; margin-top: 8px; font-size: .85rem; color: #ef4444; }
 
     /* ── MODAL ── */
     .modal-overlay {
@@ -200,6 +206,8 @@
       .contact-grid { grid-template-columns: 1fr; }
       .tour-wrapper { grid-template-columns: 1fr; }
       .tour-item { grid-template-columns: 1fr; gap: 8px; }
+      .tour-accordion.open { display: grid; }
+      .tour-accordion img { max-width: 300px; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
@@ -523,19 +531,40 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
           if (!date || !location || !info) continue;
           var dm = date.trim().split('.');
           var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10);
+          var flyerSrc = flyer && flyer.trim() ? 'res/images/events/' + flyer.trim() : '';
+          var linkHref = link && link.trim() ? (link.indexOf('://') === -1 ? 'https://' + link : link) : '';
           var item = document.createElement('div');
           item.className = 'tour-item';
           item.innerHTML =
             '<div class="tour-date">' + d + '<span class="month">' + months[m - 1] + '</span></div>' +
-            '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span></div>';
-          (function(row, dt, loc, inf, l, f) {
-            row.addEventListener('click', function() {
-              if (activeRow) activeRow.classList.remove('active');
-              row.classList.add('active');
-              activeRow = row;
-              showFlyer(dt, loc, inf, l, f);
+            '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span></div>' +
+            '<div class="tour-accordion">' +
+              (flyerSrc ? '<img src="' + flyerSrc + '" alt="">' : '') +
+              '<div class="tour-accordion-info">' +
+                '<h4>' + info.trim() + '</h4>' +
+                '<span>' + location.trim() + ' — ' + date.trim() + '</span>' +
+                (linkHref ? '<a href="' + linkHref + '" target="_blank" rel="noopener">→ Event-Seite</a>' : '') +
+              '</div>' +
+            '</div>';
+          var accordion = item.querySelector('.tour-accordion');
+          (function(row, acc, dt, loc, inf, l, f) {
+            row.addEventListener('click', function(e) {
+              if (e.target.closest('a')) return;
+              if (window.innerWidth < 768) {
+                var openAcc = document.querySelector('.tour-accordion.open');
+                if (openAcc && openAcc !== acc) { openAcc.classList.remove('open'); openAcc.closest('.tour-item').classList.remove('active'); }
+                acc.classList.toggle('open');
+                row.classList.toggle('active', acc.classList.contains('open'));
+                if (activeRow && activeRow !== row) activeRow.classList.remove('active');
+                activeRow = acc.classList.contains('open') ? row : null;
+              } else {
+                if (activeRow) activeRow.classList.remove('active');
+                row.classList.add('active');
+                activeRow = row;
+                showFlyer(dt, loc, inf, l, f);
+              }
             });
-          })(item, date, location, info, link, flyer);
+          })(item, accordion, date, location, info, link, flyer);
           list.appendChild(item);
           observeEl(item);
         }
