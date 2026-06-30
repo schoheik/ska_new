@@ -209,7 +209,7 @@
       .tour-accordion.open { display: grid; }
       .tour-accordion img { max-width: 300px; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
-      .band-wrapper { overflow: hidden; touch-action: pan-x; cursor: grab; }
+      .band-wrapper { overflow: hidden; touch-action: pan-y; cursor: grab; }
       .band-wrapper:active { cursor: grabbing; }
       #bandPhoto { width: 210%; max-width: none; height: auto; will-change: transform; }
       .band-swipe-hint {
@@ -487,7 +487,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
         updateHints();
       }
       wrapper.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; startY = e.touches[0].clientY; dragging = true; horizontal = false; img.style.transition = 'none'; });
-      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; var dx = Math.abs(e.touches[0].clientX - startX), dy = Math.abs(e.touches[0].clientY - startY); if (!horizontal && dx < dy && dy > 10) { dragging = false; return; } if (dx < 5 && dy < 5) return; horizontal = true; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; startY = e.touches[0].clientY; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
+      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; var dx = Math.abs(e.touches[0].clientX - startX), dy = Math.abs(e.touches[0].clientY - startY); if (!horizontal && dx < dy && dy > 10) { dragging = false; return; } if (dx < 5 && dy < 5) return; horizontal = true; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; startY = e.touches[0].clientY; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); }, { passive: false });
       wrapper.addEventListener('touchend', function() { if (dragging) { dragging = false; snap(); } });
       wrapper.addEventListener('mousedown', function(e) { startX = e.clientX; dragging = true; img.style.transition = 'none'; e.preventDefault(); });
       window.addEventListener('mousemove', function(e) { if (!dragging) return; var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.clientX - startX)); startX = e.clientX; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
