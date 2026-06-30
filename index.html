@@ -85,6 +85,7 @@
     .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
     .stat { text-align: center; }
     .stat-number { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: #ef4444; }
+    .stat-number:not([data-count]) { font-family: 'Helvetica Neue', Arial, sans-serif; }
     .stat-number.spin { animation: spin 1.5s linear infinite; display: inline-block; }
     .stat-label { font-size: .8rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -471,7 +472,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       var hintL = document.getElementById('band-swipe-left');
       var hintR = document.getElementById('band-swipe-right');
       if (!wrapper || !img) return;
-      var startX = 0, curX = 0, dragging = false;
+      var startX = 0, startY = 0, curX = 0, dragging = false, horizontal = false;
       function bounds() { var iw = img.getBoundingClientRect().width, cw = wrapper.offsetWidth; return { min: -(iw - cw), max: 0 }; }
       function updateHints() {
         var b = bounds();
@@ -485,9 +486,9 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
         img.style.transform = 'translateX(' + curX + 'px)';
         updateHints();
       }
-      wrapper.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; dragging = true; img.style.transition = 'none'; });
-      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
-      wrapper.addEventListener('touchend', function() { dragging = false; snap(); });
+      wrapper.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; startY = e.touches[0].clientY; dragging = true; horizontal = false; img.style.transition = 'none'; });
+      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; var dx = Math.abs(e.touches[0].clientX - startX), dy = Math.abs(e.touches[0].clientY - startY); if (!horizontal && dx < dy && dy > 10) { dragging = false; return; } if (dx < 5 && dy < 5) return; horizontal = true; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; startY = e.touches[0].clientY; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
+      wrapper.addEventListener('touchend', function() { if (dragging) { dragging = false; snap(); } });
       wrapper.addEventListener('mousedown', function(e) { startX = e.clientX; dragging = true; img.style.transition = 'none'; e.preventDefault(); });
       window.addEventListener('mousemove', function(e) { if (!dragging) return; var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.clientX - startX)); startX = e.clientX; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
       window.addEventListener('mouseup', function() { if (!dragging) return; dragging = false; snap(); });
