@@ -156,11 +156,6 @@
       max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto;
       display: grid; grid-template-columns: 1fr; position: relative;
     }
-    .modal-close {
-      position: absolute; top: 12px; right: 16px; background: none; border: none;
-      font-size: 2rem; color: #888; cursor: pointer; z-index: 1; line-height: 1;
-    }
-    .modal-close:hover { color: #ef4444; }
     .modal-photo { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
     .modal-info { padding: 24px; }
     .modal-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: #fff; }
@@ -217,14 +212,18 @@
       .band-wrapper:active { cursor: grabbing; }
       #bandPhoto { width: 210%; max-width: none; height: auto; will-change: transform; }
       .band-swipe-hint {
-        display: flex; position: absolute; top: 0; right: 0; bottom: 0;
-        width: 64px; background: linear-gradient(to right, transparent, rgba(0,0,0,.5));
-        align-items: center; justify-content: center; pointer-events: none;
-        opacity: 1; transition: opacity .5s;
+        display: flex; position: absolute; top: 0; bottom: 0;
+        width: 64px; align-items: center; justify-content: center;
+        pointer-events: none; opacity: 1; transition: opacity .5s;
       }
+      .band-swipe-right { right: 0; background: linear-gradient(to right, transparent, rgba(0,0,0,.5)); }
+      .band-swipe-left { left: 0; background: linear-gradient(to left, transparent, rgba(0,0,0,.5)); }
       .band-swipe-hint.hidden { opacity: 0; }
-      .band-swipe-hint span { color: #fff; font-size: 2.5rem; animation: swipePulse 1.5s ease-in-out infinite; }
-      @keyframes swipePulse { 0%,100% { transform: translateX(0); opacity: .5; } 50% { transform: translateX(8px); opacity: 1; } }
+      .band-swipe-hint span { color: #fff; font-size: 2.5rem; }
+      .band-swipe-right span { animation: swipePulseRight 1.5s ease-in-out infinite; }
+      .band-swipe-left span { animation: swipePulseLeft 1.5s ease-in-out infinite; }
+      @keyframes swipePulseRight { 0%,100% { transform: translateX(0); opacity: .5; } 50% { transform: translateX(8px); opacity: 1; } }
+      @keyframes swipePulseLeft { 0%,100% { transform: translateX(0); opacity: .5; } 50% { transform: translateX(-8px); opacity: 1; } }
     }
   </style>
 </head>
@@ -277,7 +276,8 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
         </div>
         <div class="band-wrapper" id="band-wrapper">
           <img src="res/images/hover_bridge/hover_bridge_all.png" id="bandPhoto" alt="Skarabäus">
-          <div class="band-swipe-hint" id="band-swipe-hint"><span>&#8250;</span></div>
+          <div class="band-swipe-hint band-swipe-left" id="band-swipe-left"><span>&#8249;</span></div>
+          <div class="band-swipe-hint band-swipe-right" id="band-swipe-right"><span>&#8250;</span></div>
         </div>
       </div>
     </div>
@@ -285,8 +285,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
 
   <!-- ══ MODAL ══ -->
   <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
-    <div class="modal" id="modal" onclick="event.stopPropagation()">
-      <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal" id="modal" onclick="closeModal()">
       <img class="modal-photo" id="modal-photo" src="" alt="">
       <div class="modal-info">
         <h3 class="modal-name" id="modal-name"></h3>
@@ -469,23 +468,28 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       if (window.innerWidth >= 768) return;
       var wrapper = document.getElementById('band-wrapper');
       var img = document.getElementById('bandPhoto');
-      var hint = document.getElementById('band-swipe-hint');
+      var hintL = document.getElementById('band-swipe-left');
+      var hintR = document.getElementById('band-swipe-right');
       if (!wrapper || !img) return;
       var startX = 0, curX = 0, dragging = false;
       function bounds() { var iw = img.getBoundingClientRect().width, cw = wrapper.offsetWidth; return { min: -(iw - cw), max: 0 }; }
+      function updateHints() {
+        var b = bounds();
+        if (hintL) hintL.classList.toggle('hidden', curX >= -5);
+        if (hintR) hintR.classList.toggle('hidden', curX <= b.min + 5);
+      }
       function snap() {
         img.style.transition = 'transform .3s ease';
         var b = bounds();
         curX = Math.max(b.min, Math.min(b.max, curX));
         img.style.transform = 'translateX(' + curX + 'px)';
-        if (hint) hint.classList.toggle('hidden', curX < -10);
+        updateHints();
       }
       wrapper.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; dragging = true; img.style.transition = 'none'; });
-      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; img.style.transform = 'translateX(' + curX + 'px)'; if (hint && curX < -10) hint.classList.add('hidden'); });
+      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
       wrapper.addEventListener('touchend', function() { dragging = false; snap(); });
-      // mouse drag for desktop touchpad
       wrapper.addEventListener('mousedown', function(e) { startX = e.clientX; dragging = true; img.style.transition = 'none'; e.preventDefault(); });
-      window.addEventListener('mousemove', function(e) { if (!dragging) return; var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.clientX - startX)); startX = e.clientX; img.style.transform = 'translateX(' + curX + 'px)'; if (hint && curX < -10) hint.classList.add('hidden'); });
+      window.addEventListener('mousemove', function(e) { if (!dragging) return; var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.clientX - startX)); startX = e.clientX; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
       window.addEventListener('mouseup', function() { if (!dragging) return; dragging = false; snap(); });
     })();
 
