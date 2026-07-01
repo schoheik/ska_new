@@ -288,6 +288,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
   <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
     <div class="modal" id="modal" onclick="closeModal()">
       <img class="modal-photo" id="modal-photo" src="" alt="">
+      <video class="modal-photo" id="modal-video" src="" muted autoplay playsinline style="display:none;"></video>
       <div class="modal-info">
         <h3 class="modal-name" id="modal-name"></h3>
         <p class="modal-instrument" id="modal-instrument"></p>
@@ -571,7 +572,19 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     function openMember(id) {
       const m = members.find(x => x.id.toLowerCase() === id.toLowerCase());
       if (!m) return;
-      document.getElementById('modal-photo').src = m.photo;
+      var img = document.getElementById('modal-photo');
+      var vid = document.getElementById('modal-video');
+      if (m.id.toLowerCase() === 'stocki') {
+        img.style.display = 'none';
+        vid.style.display = 'block';
+        vid.src = 'res/images/members/stocki_animated.mp4';
+        vid.play();
+      } else {
+        img.style.display = 'block';
+        vid.style.display = 'none';
+        vid.pause();
+        img.src = m.photo;
+      }
       document.getElementById('modal-name').textContent = m.name;
       document.getElementById('modal-instrument').textContent = m.instrument;
       document.getElementById('modal-bio').textContent = m.bio;
@@ -582,6 +595,7 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
     function closeModal() {
       document.getElementById('modal-overlay').classList.remove('open');
       document.body.style.overflow = '';
+      document.getElementById('modal-video').pause();
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
