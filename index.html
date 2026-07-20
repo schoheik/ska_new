@@ -58,8 +58,7 @@
 
     /* ── HERO LINKS (stadium) ── */
     .hero-links {
-      display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;
-      margin-top: 32px;
+      display: none;
     }
     .stadium-link {
       display: inline-flex; align-items: center; gap: 10px;
@@ -100,7 +99,12 @@
 
     /* ── ABOUT ── */
     .about-layout { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 48px; }
-    .about-text { grid-column: 1; grid-row: 1; }
+    .about-text { grid-column: 1; grid-row: 1; text-align: center; }
+    .about-text .section-title { margin-bottom: 16px; }
+    .about-middle { display: flex; gap: 16px; align-items: start; margin: 24px 0; text-align: left; }
+    .about-text-content { flex: 2; }
+    .about-bug { flex: 1; display: flex; justify-content: center; align-items: start; }
+    .about-bug img { width: 100%; height: auto; }
     .about-setlist { grid-column: 2; grid-row: 1; }
     .about-layout .carousel { grid-column: 1 / -1; grid-row: 2; }
     .about-text p + p { margin-top: 16px; }
@@ -184,14 +188,12 @@
     /* ── TOUR ── */
     #tour { background: #080808; }
     .tour-wrapper { position: relative; overflow: hidden; padding: 0 40px; }
-    .tour-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; scroll-snap-type: x mandatory; }
-    .tour-list::-webkit-scrollbar { display: none; }
+    .tour-list { display: flex; gap: 16px; will-change: transform; }
     .tour-item {
       flex: 0 0 calc(25% - 12px); min-width: 280px; box-sizing: border-box;
       background: #141414; border: 1px solid #222; border-radius: 4px;
       display: grid; grid-template-columns: 1fr 2fr; gap: 16px;
       padding: 20px; cursor: pointer; transition: border-color .3s, transform .3s;
-      scroll-snap-align: start;
     }
     .tour-item:hover { border-color: #ef4444; transform: translateY(-4px); }
     .tour-item.active { border-color: #ef4444; }
@@ -323,9 +325,17 @@
     @media (max-width: 768px) {
 
       .contact-layout { grid-template-columns: 1fr; }
+      .hero-links { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 32px; }
       .about-layout { display: flex; flex-direction: column; gap: 32px; }
-      .tour-wrapper { padding: 0 32px; }
-      .tour-item { flex: 0 0 calc(70% - 8px); min-width: 240px; }
+      .about-middle { flex-direction: column; align-items: center; }
+      .about-bug img { width: 140px; }
+      .tour-wrapper { padding: 0; }
+      .tour-btn { display: none; }
+      .tour-item { flex: 0 0 calc(70% - 8px); min-width: 240px; padding: 10px 14px; gap: 12px; }
+      .tour-date { font-size: 1.4rem; padding-right: 12px; }
+      .tour-date .month { font-size: .6rem; }
+      .tour-venue h4 { font-size: .8rem; }
+      .tour-venue span { font-size: .7rem; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
       .carousel-slide { flex: 0 0 calc(50% - 8px); }
       .carousel-btn { display: none; }
@@ -340,7 +350,6 @@
     <div class="hero-content">
       <img src="res/logo/Logo_no_background.png" alt="Skarabäus" class="hero-logo">
       <div class="hero-links">
-        <a href="#fotos" class="stadium-link"><img src="res/symbols/foto.png" alt="">Fotos</a>
         <a href="#tour" class="stadium-link"><img src="res/symbols/tour.jpg" alt="">Tour</a>
         <a href="#about" class="stadium-link"><img src="res/symbols/about.jpg" alt="">About</a>
         <a href="#contact" class="stadium-link"><img src="res/symbols/Mail.jpg" alt="">Kontakt</a>
@@ -353,14 +362,14 @@
   <section id="tour">
     <div class="container">
       <div class="section-label">Tour</div>
-      <h2 class="section-title">Nächste Konzerte</h2>
+      <h2 class="section-title">Nächste Termine</h2>
       <div class="tour-wrapper">
         <div class="tour-list" id="tour-list"></div>
         <button class="tour-btn tour-prev" id="tour-prev">&#8249;</button>
         <button class="tour-btn tour-next" id="tour-next">&#8250;</button>
       </div>
       <div style="text-align:center; margin-top:32px;">
-        <button class="tour-all-btn" id="tour-all-btn">Alle Konzerte</button>
+        <button class="tour-all-btn" id="tour-all-btn">Alle Termine</button>
       </div>
     </div>
   </section>
@@ -384,7 +393,12 @@
       <div class="about-layout">
         <div class="about-text">
           <h2 class="section-title">Die Band</h2>
-          <p>Ska - Punk - Rock'n'Roll: Mit fetter Brass Besetzung und mehr Energie als dein Hamster auf Speed bringen wir Stimmung auf deine Party!</p>
+          <div class="about-middle">
+            <div class="about-text-content">
+              <p>Ska - Punk - Rock'n'Roll: Mit fetter Brass Besetzung und mehr Energie als dein Hamster auf Speed bringen wir Stimmung auf deine Party!</p>
+            </div>
+            <div class="about-bug" id="about-bug"></div>
+          </div>
           <div class="about-stats">
             <div class="stat">
               <div class="stat-number" data-count="50" data-suffix="+">0</div>
@@ -513,7 +527,7 @@
   <!-- ══ FOOTER ══ -->
   <footer>
     <div class="footer-logo">Skarabäus</div>
-    <p style="margin-top:8px">Stay loud. Stay reckless.</p>
+    <p style="margin-top:8px">Hier könnte Ihre AGB stehen, unser Haftungsausschluss und wir bestreiten jegliche Beteiligung an ungewollten Schwangerschaften.</p>
     <p style="margin-top:16px">&copy; 2026 Skarabäus. All rights reserved.</p>
   </footer>
 
@@ -559,6 +573,19 @@
         el.innerHTML = '<span class="word-white">' + words[0] + '</span> <span class="word-red">' + words.slice(1).join(' ') + '</span>';
       }
     });
+
+    // ── Random bug image ──
+    (function() {
+      var bugs = ['bug_beer.png','bug_catcher.png','bug_chill.png','bug_niko.png','bug_sax.png','bug_trompet.png'];
+      var pick = bugs[Math.floor(Math.random() * bugs.length)];
+      var container = document.getElementById('about-bug');
+      if (container) {
+        var img = document.createElement('img');
+        img.src = 'res/images/bugs/' + pick;
+        img.alt = 'Skarabäus';
+        container.appendChild(img);
+      }
+    })();
 
     // ── About stats counter ──
     (function() {
@@ -678,8 +705,14 @@
       var slideW = 0;
       var animating = false;
 
+      var shuffled = members.slice();
+      for (var i = shuffled.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+      }
+
       function createSlide(idx) {
-        var m = members[idx];
+        var m = shuffled[idx];
         var slide = document.createElement('div');
         slide.className = 'carousel-slide';
         slide.addEventListener('click', function() { openMember(m.id); });
@@ -810,13 +843,49 @@
       var tourNext = document.getElementById('tour-next');
 
       if (tourPrev && tourNext && tourList) {
-        tourPrev.addEventListener('click', function() {
+        var tPos = 0;
+
+        function tourUpdateTransform(animate) {
+          tourList.style.transition = animate ? 'transform 0.35s ease' : 'none';
+          tourList.style.transform = 'translateX(' + (-tPos) + 'px)';
+        }
+
+        function tourScroll(dir) {
           var itemW = tourList.querySelector('.tour-item').offsetWidth + 16;
-          tourList.scrollBy({ left: -itemW, behavior: 'smooth' });
-        });
-        tourNext.addEventListener('click', function() {
+          var maxPos = tourList.scrollWidth - tourList.parentElement.offsetWidth;
+          tPos = Math.max(0, Math.min(maxPos, tPos + dir * itemW));
+          tourUpdateTransform(true);
+        }
+
+        tourPrev.addEventListener('click', function() { tourScroll(-1); });
+        tourNext.addEventListener('click', function() { tourScroll(1); });
+
+        var tStartX = 0, tDragging = false, tStartDragX = 0;
+        var tContainer = tourList.parentElement;
+        tContainer.addEventListener('touchstart', function(e) {
+          tStartX = e.touches[0].clientX;
+          tStartDragX = tPos;
+          tDragging = true;
+          tourList.style.transition = 'none';
+        }, { passive: true });
+        tContainer.addEventListener('touchmove', function(e) {
+          if (!tDragging) return;
+          var dx = e.touches[0].clientX - tStartX;
+          var dy = e.touches[0].clientY - e.touches[0].clientY;
+          var maxPos = tourList.scrollWidth - tContainer.offsetWidth;
+          tPos = Math.max(0, Math.min(maxPos, tStartDragX - dx));
+          tourList.style.transform = 'translateX(' + (-tPos) + 'px)';
+        }, { passive: true });
+        tContainer.addEventListener('touchend', function() {
+          if (!tDragging) return;
+          tDragging = false;
           var itemW = tourList.querySelector('.tour-item').offsetWidth + 16;
-          tourList.scrollBy({ left: itemW, behavior: 'smooth' });
+          var offset = tPos - tStartDragX;
+          var steps = Math.round(offset / itemW);
+          if (Math.abs(steps) < 1) steps = offset > 0 ? 1 : -1;
+          var maxPos = tourList.scrollWidth - tContainer.offsetWidth;
+          tPos = Math.max(0, Math.min(maxPos, tStartDragX + steps * itemW));
+          tourUpdateTransform(true);
         });
       }
 
