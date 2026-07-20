@@ -86,19 +86,23 @@
     }
 
     /* ── SECTION COMMON ── */
-    section { padding: 60px 0; }
+    section { padding: 42px 0; border-bottom: 1px solid #222; }
     .section-label {
-      font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
-      color: #ef4444; margin-bottom: 8px;
+      display: none;
     }
     .section-title {
       font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
-      letter-spacing: 2px; color: #fff; margin-bottom: 16px;
+      letter-spacing: 2px; color: #fff; margin-bottom: 16px; text-align: center;
     }
+    .section-title .word-white { color: #fff; }
+    .section-title .word-red { color: #ef4444; }
     .section-desc { color: #888; max-width: 600px; margin-bottom: 64px; }
 
     /* ── ABOUT ── */
-    .about-grid { display: flex; flex-direction: column; gap: 48px; }
+    .about-layout { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 48px; }
+    .about-text { grid-column: 1; grid-row: 1; }
+    .about-setlist { grid-column: 2; grid-row: 1; }
+    .about-layout .carousel { grid-column: 1 / -1; grid-row: 2; }
     .about-text p + p { margin-top: 16px; }
     .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
     .stat { text-align: center; }
@@ -109,7 +113,7 @@
 
     /* ── REPERTOIRE / SETLIST ── */
     .setlist {
-      margin-top: 48px; border-top: 1px solid #1a1a1a; padding-top: 32px;
+      margin-top: 0; padding-top: 0;
     }
     .setlist-heading {
       font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
@@ -121,7 +125,7 @@
     }
     .setlist-item {
       display: flex; align-items: center; gap: 14px;
-      padding: 12px 16px;
+      padding: 11px 16px;
       background: #111; border-left: 3px solid #333;
       border-radius: 2px; transition: border-color .3s, background .3s;
     }
@@ -140,16 +144,29 @@
     .setlist-title::before { content: '\201C'; }
     .setlist-title::after  { content: '\201D'; }
 
-    .band-wrapper { position: relative; display: inline-block; width: 100%; border: 1px solid #222; border-radius: 4px; overflow: hidden; }
-    #bandPhoto { max-width: 100%; display: block; }
-    .band-swipe-hint { display: none; }
-    .glow {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      opacity: 0; transition: opacity 0.2s;
-      pointer-events: none;
+    /* ── CAROUSEL ── */
+    .carousel { position: relative; width: 100%; overflow: hidden; padding: 0 40px; }
+    .carousel-track { display: flex; gap: 16px; will-change: transform; }
+    .carousel-slide {
+      flex: 0 0 calc(20% - 12.8px); box-sizing: border-box;
+      background: #141414; border: 1px solid #222; border-radius: 4px;
+      overflow: hidden; cursor: pointer; transition: border-color .3s, transform .3s;
     }
-    .glow.show { opacity: 1; }
+    .carousel-slide:hover { border-color: #ef4444; transform: translateY(-4px); }
+    .carousel-slide img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+    .carousel-slide-info { padding: 10px 12px; text-align: center; }
+    .carousel-slide-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; color: #fff; }
+    .carousel-slide-instrument { font-size: .7rem; color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+    .carousel-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.6); border: none; color: #fff;
+      font-size: 2rem; padding: 6px 12px; cursor: pointer; z-index: 10;
+      transition: background 0.2s; border-radius: 2px;
+    }
+    .carousel-btn:hover { background: rgba(239,68,68,0.8); }
+    .carousel-prev { left: 0; }
+    .carousel-next { right: 0; }
+    .carousel-dots { display: none; }
 
     /* ── SOCIAL ── */
     #social { background: #0d0d0d; }
@@ -166,36 +183,64 @@
 
     /* ── TOUR ── */
     #tour { background: #080808; }
-    .tour-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
-    .tour-list { display: flex; flex-direction: column; }
+    .tour-wrapper { position: relative; overflow: hidden; padding: 0 40px; }
+    .tour-list { display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; scroll-snap-type: x mandatory; }
+    .tour-list::-webkit-scrollbar { display: none; }
     .tour-item {
-      display: grid; grid-template-columns: 100px 1fr; gap: 24px; align-items: center;
-      padding: 24px 0; border-bottom: 1px solid #1a1a1a; transition: background .2s; padding-left: 16px; padding-right: 16px; cursor: pointer;
+      flex: 0 0 calc(25% - 12px); min-width: 280px; box-sizing: border-box;
+      background: #141414; border: 1px solid #222; border-radius: 4px;
+      display: grid; grid-template-columns: 1fr 2fr; gap: 16px;
+      padding: 20px; cursor: pointer; transition: border-color .3s, transform .3s;
+      scroll-snap-align: start;
     }
-    .tour-item:hover { background: #0f0f0f; }
-    .tour-item.active { background: #141414; border-left: 3px solid #ef4444; padding-left: 13px; }
-    .tour-date { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: #ef4444; }
-    .tour-date .month { font-size: .75rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #666; display: block; text-transform: uppercase; letter-spacing: 1px; }
-    .tour-venue h4 { font-weight: 700; color: #fff; }
-    .tour-venue span { font-size: .85rem; color: #777; }
-    .tour-flyer {
-      position: sticky; top: 80px; min-height: 120px;
+    .tour-item:hover { border-color: #ef4444; transform: translateY(-4px); }
+    .tour-item.active { border-color: #ef4444; }
+    .tour-date {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: #ef4444;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      border-right: 1px solid #222; padding-right: 16px;
     }
-    .tour-flyer.active {
-      border: 1px solid #222; border-radius: 4px;
-      overflow: hidden; background: #111;
+    .tour-date .month { font-size: .7rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+    .tour-venue { display: flex; flex-direction: column; justify-content: center; }
+    .tour-venue h4 { font-weight: 700; color: #fff; font-size: .95rem; }
+    .tour-venue span { font-size: .8rem; color: #777; margin-top: 4px; display: block; }
+    .tour-venue a { display: inline-block; margin-top: 8px; font-size: .8rem; color: #ef4444; }
+    .tour-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.6); border: none; color: #fff;
+      font-size: 2rem; padding: 6px 12px; cursor: pointer; z-index: 10;
+      transition: background 0.2s; border-radius: 2px;
     }
-    .tour-flyer-img { width: 100%; display: block; }
-    .tour-flyer-info { padding: 16px 20px; border-top: 1px solid #222; }
-    .tour-flyer-info h4 { color: #fff; font-weight: 700; }
-    .tour-flyer-info span { color: #777; font-size: .85rem; }
-    .tour-flyer-info a { display: inline-block; margin-top: 8px; font-size: .85rem; color: #ef4444; }
-    .tour-accordion { display: none; grid-column: 1 / -1; padding: 16px 0 8px; gap: 16px; align-items: start; }
-    .tour-accordion img { width: 100%; display: block; border-radius: 4px; }
-    .tour-accordion-info { padding: 4px 0; }
-    .tour-accordion-info h4 { color: #fff; font-weight: 700; font-size: 1rem; }
-    .tour-accordion-info span { color: #777; font-size: .85rem; display: block; margin-top: 4px; }
-    .tour-accordion-info a { display: inline-block; margin-top: 8px; font-size: .85rem; color: #ef4444; }
+    .tour-btn:hover { background: rgba(239,68,68,0.8); }
+    .tour-prev { left: 0; }
+    .tour-next { right: 0; }
+    .tour-all-btn {
+      padding: 12px 32px; background: transparent; border: 1.5px solid #ef4444;
+      color: #ef4444; font-family: 'Inter', sans-serif; font-size: .85rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      cursor: pointer; transition: background .3s, color .3s;
+    }
+    .tour-all-btn:hover { background: #ef4444; color: #0a0a0a; }
+    .tour-popup-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.85); align-items: center; justify-content: center;
+    }
+    .tour-popup-overlay.open { display: flex; }
+    .tour-popup {
+      background: #141414; border: 1px solid #333; border-radius: 4px;
+      max-width: 95%; width: 700px; max-height: 85vh; overflow-y: auto;
+      margin: 16px;
+    }
+    .tour-table { width: 100%; border-collapse: collapse; }
+    .tour-table th {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px;
+      color: #ef4444; text-align: left; padding: 14px 12px;
+      border-bottom: 1px solid #333; position: sticky; top: 0; background: #141414;
+    }
+    .tour-table td {
+      padding: 12px; border-bottom: 1px solid #1a1a1a; color: #ccc; font-size: .85rem;
+    }
+    .tour-table tr:hover td { background: #1a1a1a; }
 
     /* ── MODAL ── */
     .modal-overlay {
@@ -217,18 +262,43 @@
 
     /* ── CONTACT ── */
     #contact { background: #0d0d0d; }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
-    .social-links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
-    .social-link {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 24px; border: 1px solid #222; border-radius: 2px;
-      font-size: .85rem; font-weight: 600; color: #ccc; transition: all .3s;
+    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+    .contact-left { display: flex; flex-direction: column; gap: 16px; }
+    .contact-open-btn {
+      align-self: flex-start; padding: 14px 40px; background: #ef4444; border: none;
+      color: #0a0a0a; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+      font-size: .85rem; cursor: pointer; transition: opacity .3s;
     }
-    .social-link:hover { border-color: #ef4444; color: #ef4444; background: #111; }
+    .contact-open-btn:hover { opacity: .8; }
+    .contact-right { display: flex; flex-direction: column; gap: 16px; }
+    .downloads-heading {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
+      letter-spacing: 3px; color: #ef4444; text-transform: uppercase;
+    }
+    .downloads-grid { display: flex; flex-direction: column; gap: 12px; }
+    .download-card {
+      display: flex; align-items: center; gap: 16px;
+      padding: 20px 24px; border: 1px solid #222; border-radius: 4px;
+      background: #111; transition: border-color .3s, background .3s;
+      text-decoration: none; color: #e0e0e0;
+    }
+    .download-card:hover { border-color: #ef4444; background: #181818; color: #fff; }
+    .download-icon { font-size: 1.8rem; }
+    .download-name { font-weight: 700; font-size: .95rem; }
+    .download-meta { font-size: .8rem; color: #666; display: block; margin-top: 2px; }
+    .contact-popup-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,.85); align-items: center; justify-content: center;
+    }
+    .contact-popup-overlay.open { display: flex; }
+    .contact-popup {
+      background: #141414; border: 1px solid #333; border-radius: 4px;
+      max-width: 520px; width: 90%; padding: 32px;
+    }
     .contact-form { display: flex; flex-direction: column; gap: 16px; }
     .contact-form input,
     .contact-form textarea {
-      background: #141414; border: 1px solid #222; border-radius: 2px;
+      background: #0a0a0a; border: 1px solid #222; border-radius: 2px;
       padding: 14px 16px; font-family: 'Inter', sans-serif; font-size: .9rem; color: #e0e0e0;
       transition: border-color .3s;
     }
@@ -242,21 +312,6 @@
     }
     .contact-form button:hover { opacity: .8; }
 
-    /* ── DOWNLOADS ── */
-    #downloads { background: #080808; text-align: center; }
-    #downloads .section-desc { margin-left: auto; margin-right: auto; }
-    .downloads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; max-width: 600px; margin: 0 auto; }
-    .download-card {
-      display: flex; align-items: center; gap: 16px;
-      padding: 20px 24px; border: 1px solid #222; border-radius: 4px;
-      background: #111; transition: border-color .3s, background .3s;
-      text-decoration: none; color: #e0e0e0;
-    }
-    .download-card:hover { border-color: #ef4444; background: #181818; color: #fff; }
-    .download-icon { font-size: 1.8rem; }
-    .download-name { font-weight: 700; font-size: .95rem; }
-    .download-meta { font-size: .8rem; color: #666; display: block; margin-top: 2px; }
-
     /* ── FOOTER ── */
     footer {
       text-align: center; padding: 48px 24px; border-top: 1px solid #111;
@@ -267,29 +322,13 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
 
-      .contact-grid { grid-template-columns: 1fr; }
-      .tour-wrapper { grid-template-columns: 1fr; }
-      .tour-flyer { min-height: 0; }
-      .tour-item { grid-template-columns: 1fr; gap: 8px; }
-      .tour-accordion.open { display: grid; }
-      .tour-accordion img { max-width: 300px; }
+      .contact-layout { grid-template-columns: 1fr; }
+      .about-layout { display: flex; flex-direction: column; gap: 32px; }
+      .tour-wrapper { padding: 0 32px; }
+      .tour-item { flex: 0 0 calc(70% - 8px); min-width: 240px; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
-      .band-wrapper { overflow: hidden; touch-action: pan-y; cursor: grab; }
-      .band-wrapper:active { cursor: grabbing; }
-      #bandPhoto { width: 210%; max-width: none; height: auto; will-change: transform; }
-      .band-swipe-hint {
-        display: flex; position: absolute; top: 0; bottom: 0;
-        width: 64px; align-items: center; justify-content: center;
-        pointer-events: none; opacity: 1; transition: opacity .5s;
-      }
-      .band-swipe-right { right: 0; background: linear-gradient(to right, transparent, rgba(0,0,0,.5)); }
-      .band-swipe-left { left: 0; background: linear-gradient(to left, transparent, rgba(0,0,0,.5)); }
-      .band-swipe-hint.hidden { opacity: 0; }
-      .band-swipe-hint span { color: #fff; font-size: 2.5rem; }
-      .band-swipe-right span { animation: swipePulseRight 1.5s ease-in-out infinite; }
-      .band-swipe-left span { animation: swipePulseLeft 1.5s ease-in-out infinite; }
-      @keyframes swipePulseRight { 0%,100% { transform: translateX(0); opacity: .5; } 50% { transform: translateX(8px); opacity: 1; } }
-      @keyframes swipePulseLeft { 0%,100% { transform: translateX(0); opacity: .5; } 50% { transform: translateX(-8px); opacity: 1; } }
+      .carousel-slide { flex: 0 0 calc(50% - 8px); }
+      .carousel-btn { display: none; }
     }
   </style>
 </head>
@@ -310,14 +349,6 @@
     <div class="scroll-hint">Scroll down</div>
   </section>
 
-  <!-- ══ FOTOS ══ -->
-  <section id="fotos">
-    <div class="container">
-      <div class="section-label">Fotos</div>
-      <h2 class="section-title">Impressionen</h2>
-    </div>
-  </section>
-
   <!-- ══ TOUR ══ -->
   <section id="tour">
     <div class="container">
@@ -325,23 +356,35 @@
       <h2 class="section-title">Nächste Konzerte</h2>
       <div class="tour-wrapper">
         <div class="tour-list" id="tour-list"></div>
-        <div class="tour-flyer" id="tour-flyer">
-          <img class="tour-flyer-img" id="tour-flyer-img" src="" alt="" style="display:none;">
-          <div class="tour-flyer-info" id="tour-flyer-info" style="display:none;"></div>
-        </div>
+        <button class="tour-btn tour-prev" id="tour-prev">&#8249;</button>
+        <button class="tour-btn tour-next" id="tour-next">&#8250;</button>
+      </div>
+      <div style="text-align:center; margin-top:32px;">
+        <button class="tour-all-btn" id="tour-all-btn">Alle Konzerte</button>
       </div>
     </div>
   </section>
+
+  <!-- ══ TOUR POPUP ══ -->
+  <div class="tour-popup-overlay" id="tour-popup-overlay">
+    <div class="tour-popup" id="tour-popup">
+      <table class="tour-table" id="tour-table">
+        <thead>
+          <tr><th>Datum</th><th>Veranstaltung</th><th>Ort</th></tr>
+        </thead>
+        <tbody id="tour-table-body"></tbody>
+      </table>
+    </div>
+  </div>
 
   <!-- ══ ABOUT ══ -->
   <section id="about">
     <div class="container">
       <div class="section-label">About</div>
-      <div class="about-grid">
+      <div class="about-layout">
         <div class="about-text">
-          <h2 class="section-title">Ska · Punk · Rock'n'Roll</h2>
-          <p>Wir sind Skarabaeus! Wir spielen den besten Ska, Punk und Rock'n'Roll in ganz Franken! Wenn ihr unseren Musikstil erkunden wollt, dann geht doch auf unsere Social-Media Kanäle und hört und seht mal rein oder kommt einfach zu einem unserer Termine vorbei.
-Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands vereint, um die beste Band der Welt zu formen!</p>
+          <h2 class="section-title">Die Band</h2>
+          <p>Ska - Punk - Rock'n'Roll: Mit fetter Brass Besetzung und mehr Energie als dein Hamster auf Speed bringen wir Stimmung auf deine Party!</p>
           <div class="about-stats">
             <div class="stat">
               <div class="stat-number" data-count="50" data-suffix="+">0</div>
@@ -356,7 +399,14 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
               <div class="stat-label">Spaß</div>
             </div>
           </div>
-
+        </div>
+        <div class="carousel" id="member-carousel">
+          <div class="carousel-track" id="carousel-track"></div>
+          <button class="carousel-btn carousel-prev" id="carousel-prev">&#8249;</button>
+          <button class="carousel-btn carousel-next" id="carousel-next">&#8250;</button>
+          <div class="carousel-dots" id="carousel-dots"></div>
+        </div>
+        <div class="about-setlist">
           <div class="setlist">
             <div class="setlist-heading">&#9835; Repertoire</div>
             <div class="setlist-grid">
@@ -395,21 +445,8 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
                   <span class="setlist-artist">Blink 182</span>
                 </div>
               </div>
-              <div class="setlist-item">
-                <span class="setlist-nr">06</span>
-                <div class="setlist-info">
-                  <div class="setlist-title">One Step Beyond</div>
-                  <span class="setlist-artist">Madness</span>
-                </div>
-              </div>
             </div>
           </div>
-
-        </div>
-        <div class="band-wrapper" id="band-wrapper">
-          <img src="res/images/hover_bridge/hover_bridge_all.png" id="bandPhoto" alt="Skarabäus">
-          <div class="band-swipe-hint band-swipe-left" id="band-swipe-left"><span>&#8249;</span></div>
-          <div class="band-swipe-hint band-swipe-right" id="band-swipe-right"><span>&#8250;</span></div>
         </div>
       </div>
     </div>
@@ -431,45 +468,47 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
   <!-- ══ CONTACT ══ -->
   <section id="contact">
     <div class="container">
-      <div class="section-label">Kontakt</div>
-      <div class="contact-grid">
-        <div>
-          <h2 class="section-title">Schreibt uns einen Liebesbrief</h2>
+      <div class="section-label">Kontakt & Downloads</div>
+      <div class="contact-layout">
+        <div class="contact-left">
+          <h2 class="section-title">Für Veranstalter</h2>
           <p class="section-desc" style="margin-bottom:0">Buchung, Presse, Veranstalter? Schreibt uns einfach!</p>
-
+          <button class="contact-open-btn" id="contact-open-btn">Kontakt</button>
         </div>
-        <form class="contact-form">
-          <input type="text" placeholder="Your name">
-          <input type="email" placeholder="Your email">
-          <textarea placeholder="Your message"></textarea>
-          <button type="submit">Send</button>
-        </form>
+        <div class="contact-right">
+          <div class="downloads-heading">Downloads</div>
+          <div class="downloads-grid">
+            <a href="doc/skarabaeus_press.zip" class="download-card" target="_blank">
+              <span class="download-icon">&#128196;</span>
+              <div>
+                <div class="download-name">Presse</div>
+                <span class="download-meta">Fotos, Logo, Pressetext</span>
+              </div>
+            </a>
+            <a href="doc/skarabaeus_technik.zip" class="download-card" target="_blank">
+              <span class="download-icon">&#9881;</span>
+              <div>
+                <div class="download-name">Technik</div>
+                <span class="download-meta">Bühnenplan, Tech Rider</span>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ══ DOWNLOADS ══ -->
-  <section id="downloads">
-    <div class="container">
-      <div class="section-label">Downloads</div>
-      <div class="downloads-grid">
-        <a href="doc/skarabaeus_press.zip" class="download-card" target="_blank">
-          <span class="download-icon">&#128196;</span>
-          <div>
-            <div class="download-name">Press Kit</div>
-            <span class="download-meta">skarabaeus_press.zip</span>
-          </div>
-        </a>
-        <a href="doc/skarabaeus_technik.zip" class="download-card" target="_blank">
-          <span class="download-icon">&#9881;</span>
-          <div>
-            <div class="download-name">Tech Rider</div>
-            <span class="download-meta">skarabaeus_technik.zip</span>
-          </div>
-        </a>
-      </div>
+  <!-- ══ CONTACT POPUP ══ -->
+  <div class="contact-popup-overlay" id="contact-popup-overlay">
+    <div class="contact-popup" id="contact-popup">
+      <form class="contact-form">
+        <input type="text" placeholder="Your name">
+        <input type="email" placeholder="Your email">
+        <textarea placeholder="Your message"></textarea>
+        <button type="submit">Send</button>
+      </form>
     </div>
-  </section>
+  </div>
 
   <!-- ══ FOOTER ══ -->
   <footer>
@@ -511,6 +550,15 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       observer.observe(el);
     }
     document.querySelectorAll('section').forEach(observeEl);
+
+    // ── Section title coloring ──
+    document.querySelectorAll('.section-title').forEach(function(el) {
+      var text = el.textContent.trim();
+      var words = text.split(/\s+/);
+      if (words.length >= 2) {
+        el.innerHTML = '<span class="word-white">' + words[0] + '</span> <span class="word-red">' + words.slice(1).join(' ') + '</span>';
+      }
+    });
 
     // ── About stats counter ──
     (function() {
@@ -574,115 +622,6 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
       obs.observe(statsEl);
     })();
 
-    // ── Mobile band photo swipe ──
-    (function() {
-      if (window.innerWidth >= 768) return;
-      var wrapper = document.getElementById('band-wrapper');
-      var img = document.getElementById('bandPhoto');
-      var hintL = document.getElementById('band-swipe-left');
-      var hintR = document.getElementById('band-swipe-right');
-      if (!wrapper || !img) return;
-      var startX = 0, startY = 0, curX = 0, dragging = false, horizontal = false;
-      function bounds() { var iw = img.getBoundingClientRect().width, cw = wrapper.offsetWidth; return { min: -(iw - cw), max: 0 }; }
-      function updateHints() {
-        var b = bounds();
-        if (hintL) hintL.classList.toggle('hidden', curX >= -5);
-        if (hintR) hintR.classList.toggle('hidden', curX <= b.min + 5);
-      }
-      function snap() {
-        img.style.transition = 'transform .3s ease';
-        var b = bounds();
-        curX = Math.max(b.min, Math.min(b.max, curX));
-        img.style.transform = 'translateX(' + curX + 'px)';
-        updateHints();
-      }
-      wrapper.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; startY = e.touches[0].clientY; dragging = true; horizontal = false; img.style.transition = 'none'; });
-      wrapper.addEventListener('touchmove', function(e) { if (!dragging) return; var dx = Math.abs(e.touches[0].clientX - startX), dy = Math.abs(e.touches[0].clientY - startY); if (!horizontal && dx < dy && dy > 10) { dragging = false; return; } if (dx < 5 && dy < 5) return; horizontal = true; e.preventDefault(); var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.touches[0].clientX - startX)); startX = e.touches[0].clientX; startY = e.touches[0].clientY; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); }, { passive: false });
-      wrapper.addEventListener('touchend', function() { if (dragging) { dragging = false; snap(); } });
-      wrapper.addEventListener('mousedown', function(e) { startX = e.clientX; dragging = true; img.style.transition = 'none'; e.preventDefault(); });
-      window.addEventListener('mousemove', function(e) { if (!dragging) return; var b = bounds(); curX = Math.max(b.min, Math.min(b.max, curX + e.clientX - startX)); startX = e.clientX; img.style.transform = 'translateX(' + curX + 'px)'; updateHints(); });
-      window.addEventListener('mouseup', function() { if (!dragging) return; dragging = false; snap(); });
-    })();
-
-    // ── Band photo hover zones (glow overlay) ──
-    const memberList = ['alex','catcher','dschembi','heiko','jürgen','lerry','niko','ralf','stocki'];
-    const boxes = {
-      alex:    { x:  42, y: 346, w: 282, h: 786 },
-      catcher: { x: 868, y: 340, w: 256, h: 840 },
-      dschembi:{ x: 254, y: 326, w: 252, h: 822 },
-      heiko:   { x:1568, y: 334, w: 254, h: 878 },
-      jürgen:  { x:1778, y: 290, w: 304, h: 940 },
-      lerry:   { x:1068, y: 318, w: 260, h: 854 },
-      niko:    { x: 644, y: 326, w: 266, h: 844 },
-      ralf:    { x: 446, y: 344, w: 258, h: 806 },
-      stocki:  { x:1304, y: 326, w: 292, h: 882 }
-    };
-    const BG_W = 2256, BG_H = 1248;
-
-    const centers = {};
-    for (const name of memberList) {
-      const b = boxes[name];
-      centers[name] = { cx: b.x + b.w / 2, cy: b.y + b.h / 2 };
-    }
-
-    const bandPhoto = document.getElementById('bandPhoto');
-    const wrapper = document.getElementById('band-wrapper');
-    const glows = [];
-
-    memberList.forEach(name => {
-      const img = document.createElement('img');
-      img.className = 'glow';
-      img.src = 'res/images/hover_bridge/' + name + '_hover.png';
-      img.alt = '';
-      wrapper.appendChild(img);
-      glows.push({ el: img, name });
-    });
-
-    function hitTest(natX, natY) {
-      let best = -1;
-      let bestDist = Infinity;
-      for (let i = 0; i < memberList.length; i++) {
-        const name = memberList[i];
-        const b = boxes[name];
-        if (natX >= b.x && natX < b.x + b.w && natY >= b.y && natY < b.y + b.h) {
-          const c = centers[name];
-          const d = (natX - c.cx) ** 2 + (natY - c.cy) ** 2;
-          if (d < bestDist) {
-            bestDist = d;
-            best = i;
-          }
-        }
-      }
-      return best;
-    }
-
-    let activeIdx = -1;
-
-    bandPhoto.addEventListener('mousemove', (e) => {
-      const rect = bandPhoto.getBoundingClientRect();
-      const x = Math.floor((e.clientX - rect.left) / rect.width * BG_W);
-      const y = Math.floor((e.clientY - rect.top) / rect.height * BG_H);
-      const idx = hitTest(x, y);
-      if (idx !== activeIdx) {
-        activeIdx = idx;
-        glows.forEach(g => g.el.classList.toggle('show', g.name === memberList[idx]));
-        bandPhoto.style.cursor = idx >= 0 ? 'pointer' : 'default';
-      }
-    });
-
-    bandPhoto.addEventListener('mouseleave', () => {
-      activeIdx = -1;
-      glows.forEach(g => g.el.classList.remove('show'));
-    });
-
-    bandPhoto.addEventListener('click', (e) => {
-      const rect = bandPhoto.getBoundingClientRect();
-      const x = Math.floor((e.clientX - rect.left) / rect.width * BG_W);
-      const y = Math.floor((e.clientY - rect.top) / rect.height * BG_H);
-      const idx = hitTest(x, y);
-      if (idx >= 0) openMember(memberList[idx]);
-    });
-
     // ── Members ──
     const members = [
       {"id":"Heiko","name":"Heiko","instrument":"Gitarre, Gesang","photo":"res/images/members/heiko.JPG","bio":"Orchestermeister und Streber."},
@@ -727,84 +666,138 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+    // ── Member carousel (infinite) ──
+    (function() {
+      var track = document.getElementById('carousel-track');
+      var prevBtn = document.getElementById('carousel-prev');
+      var nextBtn = document.getElementById('carousel-next');
+      if (!track) return;
+
+      var N = members.length;
+      var pos = 0;
+      var slideW = 0;
+      var animating = false;
+
+      function createSlide(idx) {
+        var m = members[idx];
+        var slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        slide.addEventListener('click', function() { openMember(m.id); });
+        var img = document.createElement('img');
+        img.src = m.photo;
+        img.alt = m.name;
+        slide.appendChild(img);
+        var info = document.createElement('div');
+        info.className = 'carousel-slide-info';
+        info.innerHTML = '<div class="carousel-slide-name">' + m.name + '</div><div class="carousel-slide-instrument">' + m.instrument + '</div>';
+        slide.appendChild(info);
+        return slide;
+      }
+
+      for (var i = 0; i < N; i++) track.appendChild(createSlide(i));
+      for (var i = 0; i < N; i++) track.appendChild(createSlide(i));
+      for (var i = 0; i < N; i++) track.appendChild(createSlide(i));
+
+      function calcSlideW() {
+        var s = track.querySelector('.carousel-slide');
+        return s ? s.offsetWidth + 16 : 200;
+      }
+
+      function updateTransform(animate) {
+        track.style.transition = animate ? 'transform 0.35s ease' : 'none';
+        track.style.transform = 'translateX(' + (-pos) + 'px)';
+      }
+
+      function init() {
+        slideW = calcSlideW();
+        pos = N * slideW;
+        updateTransform(false);
+      }
+
+      track.addEventListener('transitionend', function() {
+        if (animating) return;
+        if (pos >= 2 * N * slideW) {
+          animating = true;
+          pos -= N * slideW;
+          updateTransform(false);
+          void track.offsetHeight;
+          animating = false;
+        } else if (pos <= 0) {
+          animating = true;
+          pos += N * slideW;
+          updateTransform(false);
+          void track.offsetHeight;
+          animating = false;
+        }
+      });
+
+      function scroll(dir) {
+        slideW = calcSlideW();
+        pos += dir * slideW;
+        updateTransform(true);
+      }
+
+      prevBtn.addEventListener('click', function() { scroll(-1); });
+      nextBtn.addEventListener('click', function() { scroll(1); });
+
+      var startX = 0, dragging = false, startDragX = 0;
+      var container = track.parentElement;
+      container.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        startDragX = pos;
+        dragging = true;
+        track.style.transition = 'none';
+      }, { passive: true });
+      container.addEventListener('touchmove', function(e) {
+        if (!dragging) return;
+        var dx = e.touches[0].clientX - startX;
+        pos = startDragX - dx;
+        track.style.transform = 'translateX(' + (-pos) + 'px)';
+      }, { passive: true });
+      container.addEventListener('touchend', function() {
+        if (!dragging) return;
+        dragging = false;
+        slideW = calcSlideW();
+        var offset = pos - startDragX;
+        var steps = Math.round(offset / slideW);
+        if (Math.abs(steps) < 1) steps = offset > 0 ? 1 : -1;
+        pos = startDragX + steps * slideW;
+        updateTransform(true);
+      });
+
+      init();
+    })();
+
     // ── Tour dates from CSV ──
     (function() {
       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       var list = document.getElementById('tour-list');
-      var flyerPanel = document.getElementById('tour-flyer');
-      var flyerImg = document.getElementById('tour-flyer-img');
-      var flyerInfo = document.getElementById('tour-flyer-info');
-      var activeRow = null;
-
-      function showFlyer(date, location, info, link, flyer) {
-        if (flyer && flyer.trim()) {
-          flyerPanel.classList.add('active');
-          flyerImg.src = 'res/images/events/' + flyer.trim();
-          flyerImg.style.display = 'block';
-          flyerInfo.style.display = 'block';
-          flyerInfo.innerHTML = '<h4>' + info.trim() + '</h4><span>' + location.trim() + ' — ' + date.trim() + '</span>';
-          if (link && link.trim()) {
-            var href = link.indexOf('://') === -1 ? 'https://' + link : link;
-            flyerInfo.innerHTML += '<br><a href="' + href + '" target="_blank" rel="noopener">→ Event-Seite</a>';
-          }
-        } else {
-          flyerPanel.classList.remove('active');
-          flyerImg.style.display = 'none';
-          flyerInfo.style.display = 'none';
-        }
-      }
 
       function parseRows(csvText) {
         var lines = csvText.trim().split('\n');
         for (var i = 1; i < lines.length; i++) {
           if (!lines[i].trim()) continue;
           var parts = lines[i].split(';');
-          var date = parts[0], location = parts[1], info = parts[2], link = parts[3], flyer = parts[4];
+          var date = parts[0], location = parts[1], info = parts[2], link = parts[3];
           if (!date || !location || !info) continue;
           var dm = date.trim().split('.');
           var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10);
-          var flyerSrc = flyer && flyer.trim() ? 'res/images/events/' + flyer.trim() : '';
           var linkHref = link && link.trim() ? (link.indexOf('://') === -1 ? 'https://' + link : link) : '';
           var item = document.createElement('div');
           item.className = 'tour-item';
           item.innerHTML =
             '<div class="tour-date">' + d + '<span class="month">' + months[m - 1] + '</span></div>' +
-            '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span></div>' +
-            '<div class="tour-accordion">' +
-              (flyerSrc ? '<img src="' + flyerSrc + '" alt="">' : '') +
-              '<div class="tour-accordion-info">' +
-                '<h4>' + info.trim() + '</h4>' +
-                '<span>' + location.trim() + ' — ' + date.trim() + '</span>' +
-                (linkHref ? '<a href="' + linkHref + '" target="_blank" rel="noopener">→ Event-Seite</a>' : '') +
-              '</div>' +
+            '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span>' +
+            (linkHref ? '<a href="' + linkHref + '" target="_blank" rel="noopener">→ Event-Seite</a>' : '') +
             '</div>';
-          var accordion = item.querySelector('.tour-accordion');
-          (function(row, acc, dt, loc, inf, l, f) {
-            row.addEventListener('click', function(e) {
-              if (e.target.closest('a')) return;
-              if (window.innerWidth < 768) {
-                var openAcc = document.querySelector('.tour-accordion.open');
-                if (openAcc && openAcc !== acc) { openAcc.classList.remove('open'); openAcc.closest('.tour-item').classList.remove('active'); }
-                acc.classList.toggle('open');
-                row.classList.toggle('active', acc.classList.contains('open'));
-                if (activeRow && activeRow !== row) activeRow.classList.remove('active');
-                activeRow = acc.classList.contains('open') ? row : null;
-              } else {
-                if (activeRow === row) {
-                  activeRow.classList.remove('active');
-                  activeRow = null;
-                  flyerPanel.classList.remove('active');
-                  flyerImg.style.display = 'none';
-                  flyerInfo.style.display = 'none';
-                } else {
-                  if (activeRow) activeRow.classList.remove('active');
-                  row.classList.add('active');
-                  activeRow = row;
-                  showFlyer(dt, loc, inf, l, f);
-                }
-              }
-            });
-          })(item, accordion, date, location, info, link, flyer);
+          if (linkHref) {
+            (function(href) {
+              item.addEventListener('click', function(e) {
+                if (e.target.closest('a')) return;
+                window.open(href, '_blank');
+              });
+            })(linkHref);
+          }
           list.appendChild(item);
           observeEl(item);
         }
@@ -812,20 +805,55 @@ Wir machen Musik seit 2019. Wir haben unsere Erfahrungen aus frühreren Bands ve
 
       parseRows(tourData);
 
-      flyerPanel.addEventListener('click', function(e) {
-        if (e.target.closest('a')) return;
-        if (activeRow) activeRow.classList.remove('active');
-        activeRow = null;
-        flyerPanel.classList.remove('active');
-        flyerImg.style.display = 'none';
-        flyerInfo.style.display = 'none';
-      });
+      var tourList = document.getElementById('tour-list');
+      var tourPrev = document.getElementById('tour-prev');
+      var tourNext = document.getElementById('tour-next');
+
+      if (tourPrev && tourNext && tourList) {
+        tourPrev.addEventListener('click', function() {
+          var itemW = tourList.querySelector('.tour-item').offsetWidth + 16;
+          tourList.scrollBy({ left: -itemW, behavior: 'smooth' });
+        });
+        tourNext.addEventListener('click', function() {
+          var itemW = tourList.querySelector('.tour-item').offsetWidth + 16;
+          tourList.scrollBy({ left: itemW, behavior: 'smooth' });
+        });
+      }
+
+      var tableBody = document.getElementById('tour-table-body');
+      var overlay = document.getElementById('tour-popup-overlay');
+      var allBtn = document.getElementById('tour-all-btn');
+
+      if (tableBody && tourData) {
+        var lines = tourData.trim().split('\n');
+        for (var i = 1; i < lines.length; i++) {
+          if (!lines[i].trim()) continue;
+          var parts = lines[i].split(';');
+          var date = parts[0], location = parts[1], info = parts[2];
+          if (!date || !location || !info) continue;
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + date.trim() + '</td><td>' + info.trim() + '</td><td>' + location.trim() + '</td>';
+          tableBody.appendChild(tr);
+        }
+      }
+
+      if (allBtn && overlay) {
+        allBtn.addEventListener('click', function() { overlay.classList.add('open'); });
+        overlay.addEventListener('click', function() { overlay.classList.remove('open'); });
+      }
     })();
 
-    // ── Contact form ──
+    // ── Contact popup ──
+    var contactOpenBtn = document.getElementById('contact-open-btn');
+    var contactOverlay = document.getElementById('contact-popup-overlay');
+    if (contactOpenBtn && contactOverlay) {
+      contactOpenBtn.addEventListener('click', function() { contactOverlay.classList.add('open'); });
+      contactOverlay.addEventListener('click', function() { contactOverlay.classList.remove('open'); });
+    }
     document.querySelector('.contact-form').addEventListener('submit', (e) => {
       e.preventDefault();
       alert('Thanks for reaching out! We\'ll get back to you between tours. 🤘');
+      contactOverlay.classList.remove('open');
     });
 
 
