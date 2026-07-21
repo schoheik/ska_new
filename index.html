@@ -148,6 +148,13 @@
     }
     .setlist-title::before { content: '\201C'; }
     .setlist-title::after  { content: '\201D'; }
+    .setlist-play {
+      flex-shrink: 0; width: 29px; height: 29px; border-radius: 50%;
+      background: #ef4444; display: flex; align-items: center; justify-content: center;
+      margin-left: auto; transition: transform .2s;
+    }
+    .setlist-item:hover .setlist-play { transform: scale(1.21); }
+    .setlist-play svg { width: 13px; height: 13px; fill: #fff; margin-left: 2px; }
 
     /* ── CAROUSEL ── */
     .carousel { position: relative; width: 100%; overflow: hidden; padding: 0 40px; }
@@ -432,6 +439,7 @@
                   <div class="setlist-title">Just cant get enough</div>
                   <span class="setlist-artist">Depeche Mode</span>
                 </div>
+                <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </a>
               <a href="https://www.youtube.com/watch?v=LfBNgRkuCH4" class="setlist-item" target="_blank" rel="noopener">
                 <span class="setlist-nr">02</span>
@@ -439,6 +447,7 @@
                   <div class="setlist-title">Ghostbusters</div>
                   <span class="setlist-artist">Ray Parker Jr</span>
                 </div>
+                <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </a>
               <a href="https://www.youtube.com/watch?v=R0bWuF-wyms" class="setlist-item" target="_blank" rel="noopener">
                 <span class="setlist-nr">03</span>
@@ -446,6 +455,7 @@
                   <div class="setlist-title">Wake me up</div>
                   <span class="setlist-artist">Avicii</span>
                 </div>
+                <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </a>
               <a href="https://www.youtube.com/watch?v=CWlMXiQN0dM" class="setlist-item" target="_blank" rel="noopener">
                 <span class="setlist-nr">04</span>
@@ -453,6 +463,7 @@
                   <div class="setlist-title">Goldener (Bamberger) Reiter</div>
                   <span class="setlist-artist">Joachim Witt</span>
                 </div>
+                <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </a>
               <a href="https://www.youtube.com/watch?v=XnMk4C2NuUc" class="setlist-item" target="_blank" rel="noopener">
                 <span class="setlist-nr">05</span>
@@ -460,6 +471,7 @@
                   <div class="setlist-title">Bella Ciao</div>
                   <span class="setlist-artist">-</span>
                 </div>
+                <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
               </a>
             </div>
           </div>
