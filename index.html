@@ -220,11 +220,11 @@
     .tour-next { right: 0; }
     .tour-all-btn {
       padding: 12px 32px; background: transparent; border: 1.5px solid #ef4444;
-      color: #ef4444; font-family: 'Inter', sans-serif; font-size: .85rem;
+      color: #fff; font-family: 'Inter', sans-serif; font-size: .85rem;
       font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
       cursor: pointer; transition: background .3s, color .3s;
     }
-    .tour-all-btn:hover { background: #ef4444; color: #0a0a0a; }
+    .tour-all-btn:hover { background: #ef4444; color: #fff; }
     .tour-popup-overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
       background: rgba(0,0,0,.85); align-items: center; justify-content: center;
@@ -269,11 +269,11 @@
     .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
     .contact-left { display: flex; flex-direction: column; gap: 16px; }
     .contact-open-btn {
-      align-self: flex-start; padding: 14px 40px; background: #ef4444; border: none;
-      color: #0a0a0a; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-      font-size: .85rem; cursor: pointer; transition: opacity .3s;
+      align-self: flex-start; padding: 14px 40px; background: transparent; border: 1.5px solid #ef4444;
+      color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+      font-size: .85rem; cursor: pointer; transition: background .3s, color .3s;
     }
-    .contact-open-btn:hover { opacity: .8; }
+    .contact-open-btn:hover { background: #ef4444; color: #0a0a0a; }
     .contact-right { display: flex; flex-direction: column; gap: 16px; }
     .downloads-heading {
       font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
@@ -371,7 +371,7 @@
         <button class="tour-btn tour-next" id="tour-next">&#8250;</button>
       </div>
       <div style="text-align:center; margin-top:32px;">
-        <button class="tour-all-btn" id="tour-all-btn">Alle Termine</button>
+        <button class="tour-all-btn" id="tour-all-btn">Alle Termine &rarr;</button>
       </div>
     </div>
   </section>
@@ -489,7 +489,7 @@
         <div class="contact-left">
           <h2 class="section-title">Für Veranstalter</h2>
           <p class="section-desc" style="margin-bottom:0">Buchung, Presse, Veranstalter? Schreibt uns einfach!</p>
-          <button class="contact-open-btn" id="contact-open-btn">Kontakt</button>
+          <button class="contact-open-btn" id="contact-open-btn">Kontakt &rarr;</button>
         </div>
         <div class="contact-right">
           <div class="downloads-heading">Downloads</div>
