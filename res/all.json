@@ -4,62 +4,62 @@
         "name": "Heiko",
         "instrument": "Gitarre, Gesang",
         "photo": "res/images/members/heiko.JPG",
-        "bio": "Orchestermeister und Streber."
+        "bio": "Orchestermeister und Streber. Er ist im off-beat (Nachschlag!) eingefangen."
     },
     {
         "id": "Alex",
         "name": "Alex",
         "instrument": "Gitarre",
         "photo": "res/images/members/alex.JPG",
-        "bio": "Sieht gut aus und kann ein Liederbuch voller Schlager auswendig spielen."
+        "bio": "Sieht am besten aus. Er kann auch ein Liederbuch voller Schlager auswendig spielen."
     },
     {
         "id": "Ralf",
         "name": "Ralf",
         "instrument": "Bass-Gitarre",
         "photo": "res/images/members/ralf.JPG",
-        "bio": "Meister der Notenblätter. Lässt seine Finger auf 4 Saiten tanzen."
+        "bio": "Meister der Notenblätter. Seine Finger tanzen auf 4 Saiten."
     },
     {
         "id": "Lerry",
         "name": "Lerry",
         "instrument": "Schlagzeug",
         "photo": "res/images/members/lerry.JPG",
-        "bio": "Als Posaunist falsch abgebogen. Sitzt jetzt hinter den Trommeln."
+        "bio": "Als Posaunist falsch abgebogen. Jetzt führt er den Takt."
     },
     {
         "id": "Dschembi",
         "name": "Dschembi",
         "instrument": "Posaune",
         "photo": "res/images/members/dschembi.JPG",
-        "bio": "Absoluter Ruhepol der Band. Außer beim Posaunensolo."
+        "bio": "Ruhepol der Band. Er wird nur laut beim Posaunensolo."
     },
     {
         "id": "Stocki",
         "name": "Stocki",
         "instrument": "Trompete",
         "photo": "res/images/members/stocki.JPG",
-        "bio": "Oddi 2.0 -> kommt bis zum c3"
+        "bio": "Oddi 3.0! Er kommt bis zum c5."
     },
     {
         "id": "Jürgen",
         "name": "Jürgen",
         "instrument": "Saxophons",
         "photo": "res/images/members/jürgen.JPG",
-        "bio": "kann auch Blockflöte spielen"
+        "bio": "Der mit dem richtig _dicken_ Saxophon! Er kann auch Blockflöte spielen."
     },
     {
         "id": "Catcher",
         "name": "Catcher",
         "instrument": "Gesang, Trompete",
         "photo": "res/images/members/catcher.JPG",
-        "bio": "Entertainer und Sexsymbol der Band."
+        "bio": "Entertainer und Sexsymbol. Er kommt mit Energie auf die Bühne."
     },
     {
         "id": "Niko",
         "name": "Niko",
         "instrument": "Gesang, Piano",
         "photo": "res/images/members/niko.JPG",
-        "bio": "War schonmal im ZDF-Fernsehgarten. Hat die Karriere in einer Boyband nur knapp verpasst."
+        "bio": "Mr. ZDF-Fernsehgarten. Er hatte die Chance auf eine in einer Boyband."
     }
 ]
