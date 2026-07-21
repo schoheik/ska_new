@@ -818,6 +818,29 @@
         updateTransform(true);
       });
 
+      var autoRunning = true;
+      var lastAutoTime = null;
+      var autoSpeed = 0.04;
+      function autoStep(ts) {
+        if (!autoRunning) { lastAutoTime = null; requestAnimationFrame(autoStep); return; }
+        if (!dragging) {
+          if (lastAutoTime !== null) {
+            var dt = ts - lastAutoTime;
+            pos += autoSpeed * dt;
+            if (pos >= 2 * N * slideW) pos -= N * slideW;
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(' + (-pos) + 'px)';
+          }
+          lastAutoTime = ts;
+        } else {
+          lastAutoTime = null;
+        }
+        requestAnimationFrame(autoStep);
+      }
+      requestAnimationFrame(autoStep);
+      container.addEventListener('mouseenter', function() { autoRunning = false; });
+      container.addEventListener('mouseleave', function() { autoRunning = true; });
+
       init();
     })();
 
