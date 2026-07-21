@@ -202,6 +202,7 @@
     /* ── TOUR ── */
     #tour { background: #080808; }
     .tour-wrapper { position: relative; overflow: hidden; padding: 0 40px; }
+    .tour-scroll-hint { display: none; }
     .tour-list { display: flex; gap: 16px; will-change: transform; }
     .tour-item {
       flex: 0 0 calc(25% - 12px); min-width: 280px; box-sizing: border-box;
@@ -226,7 +227,7 @@
       position: absolute; top: 50%; transform: translateY(-50%);
       background: rgba(0,0,0,0.6); border: none; color: #fff;
       font-size: 2rem; padding: 6px 12px; cursor: pointer; z-index: 10;
-      transition: background 0.2s; border-radius: 2px;
+      transition: background 0.2s, opacity 0.3s; border-radius: 2px;
     }
     .tour-btn:hover { background: rgba(239,68,68,0.8); }
     .tour-prev { left: 0; }
@@ -346,6 +347,11 @@
       .about-middle { flex-direction: column; align-items: center; }
       .about-bug img { width: 140px; }
       .tour-wrapper { padding: 0; }
+      .tour-scroll-hint { display: flex; position: absolute; top: 0; bottom: 0; width: 80px; align-items: center; padding: 0 12px; pointer-events: none; z-index: 2; transition: opacity .3s; }
+      .tour-scroll-hint.right { right: 0; justify-content: flex-end; background: linear-gradient(to right, transparent, #0a0a0a); }
+      .tour-scroll-hint.left { left: 0; justify-content: flex-start; background: linear-gradient(to left, transparent, #0a0a0a); }
+      .tour-scroll-hint span { font-size: 1.6rem; color: #d4a017; animation: hintPulse 1.5s ease-in-out infinite; }
+      @keyframes hintPulse { 0%,100% { opacity: 1; transform: translateX(0); } 50% { opacity: .4; transform: translateX(4px); } }
       .tour-btn { display: none; }
       .tour-item { flex: 0 0 calc(40% - 8px); min-width: 160px; padding: 24px 12px; gap: 14px; }
       .tour-date { font-size: 1.8rem; padding-right: 12px; line-height: 1; }
@@ -381,6 +387,8 @@
       <h2 class="section-title">Nächste Termine</h2>
       <div class="tour-wrapper">
         <div class="tour-list" id="tour-list"></div>
+        <div class="tour-scroll-hint left" id="tour-scroll-hint-left"><span>&lsaquo;</span></div>
+        <div class="tour-scroll-hint right" id="tour-scroll-hint-right"><span>&rsaquo;</span></div>
         <button class="tour-btn tour-prev" id="tour-prev">&#8249;</button>
         <button class="tour-btn tour-next" id="tour-next">&#8250;</button>
       </div>
@@ -891,6 +899,10 @@
         function tourUpdateTransform(animate) {
           tourList.style.transition = animate ? 'transform 0.35s ease' : 'none';
           tourList.style.transform = 'translateX(' + (-tPos) + 'px)';
+          var maxPos = tourList.scrollWidth - tContainer.offsetWidth;
+          if (tourPrev) tourPrev.style.opacity = tPos > 0 ? '1' : '0';
+          if (tourNext) tourNext.style.opacity = maxPos > 0 && tPos < maxPos ? '1' : '0';
+          updateScrollHint();
         }
 
         function tourScroll(dir) {
@@ -905,6 +917,14 @@
 
         var tStartX = 0, tDragging = false, tStartDragX = 0;
         var tContainer = tourList.parentElement;
+        var scrollHintRight = document.getElementById('tour-scroll-hint-right');
+        var scrollHintLeft = document.getElementById('tour-scroll-hint-left');
+
+        function updateScrollHint() {
+          var maxPos = tourList.scrollWidth - tContainer.offsetWidth;
+          if (scrollHintRight) scrollHintRight.style.opacity = (maxPos > 0 && tPos < maxPos) ? '1' : '0';
+          if (scrollHintLeft) scrollHintLeft.style.opacity = (tPos > 0) ? '1' : '0';
+        }
         tContainer.addEventListener('touchstart', function(e) {
           tStartX = e.touches[0].clientX;
           tStartDragX = tPos;
@@ -930,6 +950,7 @@
           tPos = Math.max(0, Math.min(maxPos, tStartDragX + steps * itemW));
           tourUpdateTransform(true);
         });
+        tourUpdateTransform(false);
       }
 
       var tableBody = document.getElementById('tour-table-body');
