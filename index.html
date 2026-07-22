@@ -415,24 +415,29 @@
     .contact-popup-overlay.open { display: flex; }
     .contact-popup {
       background: #141414; border: 1px solid #333; border-radius: 4px;
-      max-width: 520px; width: 90%; padding: 32px;
+      max-width: 520px; width: 90%; padding: 32px; position: relative;
     }
-    .contact-form { display: flex; flex-direction: column; gap: 16px; }
-    .contact-form input,
-    .contact-form textarea {
-      background: #0a0a0a; border: 1px solid #222; border-radius: 2px;
-      padding: 14px 16px; font-family: 'Inter', sans-serif; font-size: .9rem; color: #e0e0e0;
-      transition: border-color .3s;
+    .contact-info-row {
+      display: flex; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid #1a1a1a;
     }
-    .contact-form input:focus,
-    .contact-form textarea:focus { outline: none; border-color: #ef4444; }
-    .contact-form textarea { min-height: 120px; resize: vertical; }
-    .contact-form button {
-      align-self: flex-start; padding: 14px 40px; background: #ef4444; border: none;
-      color: #0a0a0a; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-      font-size: .85rem; cursor: pointer; transition: opacity .3s;
+    .contact-info-label {
+      font-weight: 700; color: #d4a017; min-width: 80px; font-size: .9rem;
     }
-    .contact-form button:hover { opacity: .8; }
+    .contact-info-value {
+      color: #ccc; font-size: .9rem;
+    }
+    .contact-socials {
+      display: flex; gap: 16px; margin-top: 24px; justify-content: center;
+    }
+    .contact-socials a {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; transition: transform .2s;
+    }
+    .contact-socials a:hover { transform: scale(1.15); }
+    .contact-socials img {
+      width: 100%; height: 100%; object-fit: contain;
+    }
 
     /* ── FOOTER ── */
     footer {
@@ -722,12 +727,26 @@
   <!-- ══ CONTACT POPUP ══ -->
   <div class="contact-popup-overlay" id="contact-popup-overlay">
     <div class="contact-popup" id="contact-popup">
-      <form class="contact-form">
-        <input type="text" placeholder="Your name">
-        <input type="email" placeholder="Your email">
-        <textarea placeholder="Your message"></textarea>
-        <button type="submit">Send</button>
-      </form>
+      <button class="footer-popup-close" id="contact-popup-close">&times;</button>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:#ef4444;margin-bottom:20px;">Kontakt</h3>
+      <div class="contact-info-row">
+        <span class="contact-info-label">Name</span>
+        <span class="contact-info-value">Matt Eagle</span>
+      </div>
+      <div class="contact-info-row">
+        <span class="contact-info-label">Telefon</span>
+        <span class="contact-info-value">01805 4646</span>
+      </div>
+      <div class="contact-info-row">
+        <span class="contact-info-label">E-Mail</span>
+        <span class="contact-info-value">master@ska.punk</span>
+      </div>
+      <div class="contact-socials">
+        <a href="https://www.youtube.com/@skarabaeusband3590" target="_blank" rel="noopener" aria-label="YouTube"><img src="res/symbols/logo_YouTube.png" alt="YouTube"></a>
+        <a href="https://www.whatsapp.com/channel/0029Vb5f6FJE50UZKepoem42" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="res/symbols/logo_whatsapp.png" alt="WhatsApp"></a>
+        <a href="https://www.facebook.com/Band.Skarabaeus?_rdr" target="_blank" rel="noopener" aria-label="Facebook"><img src="res/symbols/logo_facebook.png" alt="Facebook"></a>
+        <a href="https://www.instagram.com/skarabaeus.band/" target="_blank" rel="noopener" aria-label="Instagram"><img src="res/symbols/logo_insta.png" alt="Instagram"></a>
+      </div>
     </div>
   </div>
 
@@ -1266,15 +1285,14 @@
     // ── Contact popup ──
     var contactOpenBtn = document.getElementById('contact-open-btn');
     var contactOverlay = document.getElementById('contact-popup-overlay');
+    var contactClose = document.getElementById('contact-popup-close');
     if (contactOpenBtn && contactOverlay) {
       contactOpenBtn.addEventListener('click', function() { contactOverlay.classList.add('open'); });
-      contactOverlay.addEventListener('click', function() { contactOverlay.classList.remove('open'); });
+      contactOverlay.addEventListener('click', function(e) {
+        if (e.target === contactOverlay) contactOverlay.classList.remove('open');
+      });
     }
-    document.querySelector('.contact-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Thanks for reaching out! We\'ll get back to you between tours. 🤘');
-      contactOverlay.classList.remove('open');
-    });
+    if (contactClose) contactClose.addEventListener('click', function() { contactOverlay.classList.remove('open'); });
 
     // ── YouTube popup ──
     (function() {
