@@ -440,6 +440,35 @@
       font-size: .8rem; color: #444;
     }
     footer .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: #555; letter-spacing: 2px; }
+    footer a { color: #666; cursor: pointer; transition: color .2s; }
+    footer a:hover { color: #ef4444; }
+    .footer-popup-overlay {
+      display: none; position: fixed; inset: 0; z-index: 201;
+      background: rgba(0,0,0,.85); align-items: center; justify-content: center;
+    }
+    .footer-popup-overlay.open { display: flex; }
+    .footer-popup {
+      background: #141414; border: 1px solid #333; border-radius: 4px;
+      max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;
+      padding: 32px; position: relative;
+    }
+    .footer-popup-close {
+      position: absolute; top: 12px; right: 16px;
+      background: none; border: none; color: #fff;
+      font-size: 1.8rem; cursor: pointer; line-height: 1;
+    }
+    .footer-popup-close:hover { color: #ef4444; }
+    .footer-popup h3 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem;
+      letter-spacing: 2px; color: #ef4444; margin-bottom: 20px;
+    }
+    .footer-popup h4 {
+      font-family: 'Inter', sans-serif; font-size: .95rem;
+      font-weight: 700; color: #d4a017; margin: 16px 0 6px;
+    }
+    .footer-popup p {
+      color: #999; font-size: .85rem; line-height: 1.7; margin-bottom: 10px;
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
@@ -705,9 +734,43 @@
   <!-- ══ FOOTER ══ -->
   <footer>
     <div class="footer-logo">Skarabäus</div>
-    <p style="margin-top:8px">Hier könnte Ihre AGB stehen oder unser Haftungsausschluss. Außerdem bestreiten wir jegliche Beteiligung an ungewollten Schwangerschaften.</p>
+    <p style="margin-top:8px">Hier könnte <a id="agb-link">Ihre AGB</a> stehen oder unser <a id="haftung-link">Haftungsausschluss</a>. Außerdem bestreiten wir jegliche Beteiligung an ungewollten Schwangerschaften.</p>
     <p style="margin-top:16px">&copy; 2026 HI K O. All rights reserved.</p>
   </footer>
+
+  <!-- ══ AGB POPUP ══ -->
+  <div class="footer-popup-overlay" id="agb-popup-overlay">
+    <div class="footer-popup">
+      <button class="footer-popup-close" id="agb-popup-close">&times;</button>
+      <h3>Allgemeine Geschäftsbedingungen</h3>
+      <h4>Geltungsbereich</h4>
+      <p>Diese AGB gelten für alle Veranstaltungen, Auftritte und Geschäftsbeziehungen der Band Skarabäus. Mit der Buchung oder Teilnahme an unseren Veranstaltungen erklären Sie sich mit diesen Bedingungen einverstanden.</p>
+      <h4>Buchung und Verträge</h4>
+      <p>Buchungsanfragen werden schriftlich oder per E-Mail entgegengenommen. Verbindliche Buchungen bedürfen einer schriftlichen Bestätigung durch die Band bzw. deren Management.</p>
+      <h4>Honorare und Zahlungsbedingungen</h4>
+      <p>Das vereinbarte Honorar ist nach der Veranstaltung, spätestens jedoch innerhalb von 14 Tagen nach Rechnungserhalt, fällig. Alle Preise verstehen sich inklusive der gesetzlichen Mehrwertsteuer, sofern nicht anders angegeben.</p>
+      <h4>Stornierung</h4>
+      <p>Bei Stornierung durch den Veranstalter gelten folgende Stornierungsgebühren: bis 30 Tage vorher keine Gebühr, 15–29 Tage 50 %, weniger als 15 Tage 100 % des vereinbarten Honorars.</p>
+      <h4>Haftung</h4>
+      <p>Die Band haftet nicht für Schäden, die durch höhere Gewalt, technische Störungen oder Dritte entstehen. Die Haftung ist auf den Betrag der vereinbarten Gage begrenzt.</p>
+    </div>
+  </div>
+
+  <!-- ══ HAFTUNGSAUSSCHLUSS POPUP ══ -->
+  <div class="footer-popup-overlay" id="haftung-popup-overlay">
+    <div class="footer-popup">
+      <button class="footer-popup-close" id="haftung-popup-close">&times;</button>
+      <h3>Haftungsausschluss</h3>
+      <h4>Haftung für Inhalte</h4>
+      <p>Die Inhalte unserer Webseite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.</p>
+      <h4>Haftung für Links</h4>
+      <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.</p>
+      <h4>Urheberrecht</h4>
+      <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+      <h4>Datenschutz</h4>
+      <p>Die Nutzung unserer Webseite ist in der Regel ohne Angabe personenbezogener Daten möglich. Die Erhebung personenbezogener Daten erfolgt, soweit möglich, stets auf freiwilliger Basis. Diese Daten werden ohne Ihre ausdrückliche Zustimmung nicht an Dritte weitergegeben.</p>
+    </div>
+  </div>
 
   <script src="res/tour.data.js"></script>
   <script>
@@ -1245,6 +1308,28 @@
       });
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && ytOverlay.classList.contains('open')) closeYt();
+      });
+    })();
+
+    // ── Footer popups ──
+    (function() {
+      function setupFooterPopup(linkId, overlayId, closeId) {
+        var link = document.getElementById(linkId);
+        var overlay = document.getElementById(overlayId);
+        var close = document.getElementById(closeId);
+        if (!link || !overlay) return;
+        link.addEventListener('click', function() { overlay.classList.add('open'); });
+        if (close) close.addEventListener('click', function() { overlay.classList.remove('open'); });
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.classList.remove('open');
+        });
+      }
+      setupFooterPopup('agb-link', 'agb-popup-overlay', 'agb-popup-close');
+      setupFooterPopup('haftung-link', 'haftung-popup-overlay', 'haftung-popup-close');
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.footer-popup-overlay.open').forEach(function(o) { o.classList.remove('open'); });
+        }
       });
     })();
 
