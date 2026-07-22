@@ -324,26 +324,60 @@
     }
     .tour-table tr:hover td { background: #1a1a1a; }
 
-    /* ── LINK CONFIRM POPUP ── */
-    .link-confirm-overlay {
+    /* ── EVENT DETAIL POPUP ── */
+    .event-detail-overlay {
       display: none; position: fixed; inset: 0; z-index: 201;
       background: rgba(0,0,0,.85); align-items: center; justify-content: center;
     }
-    .link-confirm-overlay.open { display: flex; }
-    .link-confirm-box {
+    .event-detail-overlay.open { display: flex; }
+    .event-detail-box {
       background: #141414; border: 1px solid #333; border-radius: 4px;
-      padding: 32px 40px; text-align: center; max-width: 90%; width: 420px;
+      max-width: 90%; max-height: 90vh; width: 500px; padding: 0; position: relative; overflow: hidden;
     }
-    .link-confirm-box p {
-      color: #ccc; font-size: 1rem; margin-bottom: 24px;
+    .event-detail-close {
+      position: absolute; top: 12px; right: 16px;
+      background: none; border: none; color: #fff;
+      font-size: 1.8rem; cursor: pointer; line-height: 1; z-index: 2;
     }
-    .link-confirm-ok {
-      padding: 12px 40px; background: #ef4444; border: none;
-      color: #fff; font-family: 'Inter', sans-serif; font-weight: 700;
+    .event-detail-close:hover { color: #ef4444; }
+    .event-detail-img {
+      width: 100%; display: block; object-fit: contain;
+      max-height: 50vh; background: #0a0a0a;
+    }
+    .event-detail-content {
+      display: grid; grid-template-columns: 1fr 2fr; gap: 16px;
+      padding: 20px;
+    }
+    .event-detail-date {
+      font-family: 'Boogaloo', cursive; font-size: 3.5rem; color: #fff;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      border-right: 1px solid #222; padding-right: 16px; line-height: 1;
+    }
+    .event-detail-date .month {
+      font-size: 1.4rem; font-family: 'Inter', sans-serif; font-weight: 700;
+      color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; line-height: 1;
+    }
+    .event-detail-date .year {
+      font-size: .65rem; font-family: 'Inter', sans-serif; font-weight: 600;
+      color: #d4a017; letter-spacing: 1px; margin-top: 8px;
+    }
+    .event-detail-venue {
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .event-detail-venue h4 {
+      font-weight: 700; color: #fff; font-size: 1.4rem; margin-bottom: 4px;
+    }
+    .event-detail-venue .event-detail-location {
+      font-size: .9rem; color: #d4a017;
+    }
+    .event-detail-btn {
+      display: inline-block; margin-top: 4px; padding: 12px 32px;
+      background: #ef4444; border: none; color: #fff;
+      font-family: 'Inter', sans-serif; font-weight: 700;
       text-transform: uppercase; letter-spacing: 2px; font-size: .85rem;
-      cursor: pointer; transition: opacity .3s;
+      cursor: pointer; text-decoration: none; transition: opacity .3s;
     }
-    .link-confirm-ok:hover { opacity: .8; }
+    .event-detail-btn:hover { opacity: .8; color: #fff; }
 
     /* ── YOUTUBE POPUP ── */
     .yt-popup-overlay {
@@ -577,11 +611,23 @@
     </div>
   </div>
 
-  <!-- ══ LINK CONFIRM POPUP ══ -->
-  <div class="link-confirm-overlay" id="link-confirm-overlay">
-    <div class="link-confirm-box" id="link-confirm-box">
-      <p>Zur Internetseite des Veranstalters?</p>
-      <button class="link-confirm-ok" id="link-confirm-ok">Okay</button>
+  <!-- ══ EVENT DETAIL POPUP ══ -->
+  <div class="event-detail-overlay" id="event-detail-overlay">
+    <div class="event-detail-box" id="event-detail-box">
+      <button class="event-detail-close" id="event-detail-close">&times;</button>
+      <img class="event-detail-img" id="event-detail-img" src="" alt="" style="display:none;">
+      <div class="event-detail-content">
+        <div class="event-detail-date" id="event-detail-date">
+          <span id="event-detail-day"></span>
+          <span class="month" id="event-detail-month"></span>
+          <span class="year" id="event-detail-year"></span>
+        </div>
+        <div class="event-detail-venue">
+          <h4 id="event-detail-title"></h4>
+          <span class="event-detail-location" id="event-detail-location"></span>
+        </div>
+      </div>
+      <div id="event-detail-btn-wrap" style="padding: 0 20px 20px;"></div>
     </div>
   </div>
 
@@ -1138,29 +1184,24 @@
     (function() {
       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       var list = document.getElementById('tour-list');
-      var pendingTourLink = '';
-      var linkOverlay = document.getElementById('link-confirm-overlay');
-      var linkOk = document.getElementById('link-confirm-ok');
-      if (linkOk) {
-        linkOk.addEventListener('click', function() {
-          if (pendingTourLink) window.open(pendingTourLink, '_blank');
-          linkOverlay.classList.remove('open');
-          pendingTourLink = '';
-        });
-      }
-      if (linkOverlay) {
-        linkOverlay.addEventListener('click', function(e) {
-          if (e.target === linkOverlay) {
-            linkOverlay.classList.remove('open');
-            pendingTourLink = '';
-          }
-        });
-      }
+      var eventOverlay = document.getElementById('event-detail-overlay');
+      var eventClose = document.getElementById('event-detail-close');
+      var eventImg = document.getElementById('event-detail-img');
+      var eventDay = document.getElementById('event-detail-day');
+      var eventMonth = document.getElementById('event-detail-month');
+      var eventYear = document.getElementById('event-detail-year');
+      var eventTitle = document.getElementById('event-detail-title');
+      var eventLocation = document.getElementById('event-detail-location');
+      var eventBtnWrap = document.getElementById('event-detail-btn-wrap');
+
+      function closeEventDetail() { eventOverlay.classList.remove('open'); }
+
+      if (eventClose) eventClose.addEventListener('click', closeEventDetail);
+      if (eventOverlay) eventOverlay.addEventListener('click', function(e) {
+        if (e.target === eventOverlay) closeEventDetail();
+      });
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && linkOverlay && linkOverlay.classList.contains('open')) {
-          linkOverlay.classList.remove('open');
-          pendingTourLink = '';
-        }
+        if (e.key === 'Escape' && eventOverlay && eventOverlay.classList.contains('open')) closeEventDetail();
       });
 
       function parseRows(csvText) {
@@ -1168,26 +1209,42 @@
         for (var i = 1; i < lines.length; i++) {
           if (!lines[i].trim()) continue;
           var parts = lines[i].split(';');
-          var date = parts[0], location = parts[1], info = parts[2], link = parts[3];
+          var date = parts[0], location = parts[1], info = parts[2], link = parts[3], flyer = parts[4];
           if (!date || !location || !info) continue;
           var dm = date.trim().split('.');
           var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10), y = dm[2] || '';
           var linkHref = link && link.trim() ? (link.indexOf('://') === -1 ? 'https://' + link : link) : '';
+          var flyerFile = flyer && flyer.trim() ? flyer.trim() : '';
           var item = document.createElement('div');
           item.className = 'tour-item';
           item.innerHTML =
             '<div class="tour-date">' + d + '<span class="month">' + months[m - 1] + '</span><span class="year">' + y + '</span></div>' +
             '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span>' +
             '</div>';
-          if (linkHref) {
-            (function(href) {
-              item.addEventListener('click', function(e) {
-                if (e.target.closest('a')) return;
-                pendingTourLink = href;
-                document.getElementById('link-confirm-overlay').classList.add('open');
-              });
-            })(linkHref);
-          }
+          (function(d, m, y, infoText, locText, href, imgFile) {
+            item.addEventListener('click', function(e) {
+              if (e.target.closest('a')) return;
+              eventDay.textContent = d;
+              eventMonth.textContent = months[m - 1];
+              eventYear.textContent = y;
+              eventTitle.textContent = infoText;
+              eventLocation.textContent = locText;
+              if (imgFile) {
+                eventImg.src = 'res/images/events/' + imgFile;
+                eventImg.alt = infoText;
+                eventImg.style.display = 'block';
+              } else {
+                eventImg.src = '';
+                eventImg.style.display = 'none';
+              }
+              if (href) {
+                eventBtnWrap.innerHTML = '<a href="' + href + '" target="_blank" rel="noopener" class="event-detail-btn">Zum Veranstalter</a>';
+              } else {
+                eventBtnWrap.innerHTML = '';
+              }
+              eventOverlay.classList.add('open');
+            });
+          })(d, m, y, info.trim(), location.trim(), linkHref, flyerFile);
           list.appendChild(item);
           observeEl(item);
         }
