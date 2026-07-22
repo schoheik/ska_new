@@ -261,6 +261,46 @@
     }
     .tour-table tr:hover td { background: #1a1a1a; }
 
+    /* ── LINK CONFIRM POPUP ── */
+    .link-confirm-overlay {
+      display: none; position: fixed; inset: 0; z-index: 201;
+      background: rgba(0,0,0,.85); align-items: center; justify-content: center;
+    }
+    .link-confirm-overlay.open { display: flex; }
+    .link-confirm-box {
+      background: #141414; border: 1px solid #333; border-radius: 4px;
+      padding: 32px 40px; text-align: center; max-width: 90%; width: 420px;
+    }
+    .link-confirm-box p {
+      color: #ccc; font-size: 1rem; margin-bottom: 24px;
+    }
+    .link-confirm-ok {
+      padding: 12px 40px; background: #ef4444; border: none;
+      color: #fff; font-family: 'Inter', sans-serif; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px; font-size: .85rem;
+      cursor: pointer; transition: opacity .3s;
+    }
+    .link-confirm-ok:hover { opacity: .8; }
+
+    /* ── YOUTUBE POPUP ── */
+    .yt-popup-overlay {
+      display: none; position: fixed; inset: 0; z-index: 201;
+      background: rgba(0,0,0,.9); align-items: center; justify-content: center;
+    }
+    .yt-popup-overlay.open { display: flex; }
+    .yt-popup {
+      background: #000; border: 1px solid #333; border-radius: 4px;
+      max-width: 90%; width: 800px; position: relative;
+    }
+    .yt-popup iframe {
+      display: block; width: 100%; aspect-ratio: 16/9; border: none; border-radius: 4px 4px 0 0;
+    }
+    .yt-popup-close {
+      position: absolute; top: -36px; right: 0; background: none; border: none;
+      color: #fff; font-size: 1.8rem; cursor: pointer; line-height: 1;
+    }
+    .yt-popup-close:hover { color: #ef4444; }
+
     /* ── MODAL ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
@@ -411,6 +451,14 @@
     </div>
   </div>
 
+  <!-- ══ LINK CONFIRM POPUP ══ -->
+  <div class="link-confirm-overlay" id="link-confirm-overlay">
+    <div class="link-confirm-box" id="link-confirm-box">
+      <p>Zur Internetseite des Veranstalters?</p>
+      <button class="link-confirm-ok" id="link-confirm-ok">Okay</button>
+    </div>
+  </div>
+
   <!-- ══ ABOUT ══ -->
   <section id="about">
     <div class="container">
@@ -449,46 +497,46 @@
           <div class="setlist">
             <div class="setlist-heading"><span class="eq-icon"><span></span><span></span><span></span><span></span></span> Hörproben</div>
             <div class="setlist-grid">
-              <a href="https://www.youtube.com/watch?v=tW6Y-y3x9Bw" class="setlist-item" target="_blank" rel="noopener">
+              <div class="setlist-item" data-yt="https://www.youtube.com/watch?v=tW6Y-y3x9Bw">
                 <span class="setlist-nr">01</span>
                 <div class="setlist-info">
                   <div class="setlist-title">Just cant get enough</div>
                   <span class="setlist-artist">Depeche Mode</span>
                 </div>
                 <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-              </a>
-              <a href="https://www.youtube.com/watch?v=LfBNgRkuCH4" class="setlist-item" target="_blank" rel="noopener">
+              </div>
+              <div class="setlist-item" data-yt="https://www.youtube.com/watch?v=LfBNgRkuCH4">
                 <span class="setlist-nr">02</span>
                 <div class="setlist-info">
                   <div class="setlist-title">Ghostbusters</div>
                   <span class="setlist-artist">Ray Parker Jr</span>
                 </div>
                 <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-              </a>
-              <a href="https://www.youtube.com/watch?v=R0bWuF-wyms" class="setlist-item" target="_blank" rel="noopener">
+              </div>
+              <div class="setlist-item" data-yt="https://www.youtube.com/watch?v=R0bWuF-wyms">
                 <span class="setlist-nr">03</span>
                 <div class="setlist-info">
                   <div class="setlist-title">Wake me up</div>
                   <span class="setlist-artist">Avicii</span>
                 </div>
                 <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-              </a>
-              <a href="https://www.youtube.com/watch?v=CWlMXiQN0dM" class="setlist-item" target="_blank" rel="noopener">
+              </div>
+              <div class="setlist-item" data-yt="https://www.youtube.com/watch?v=CWlMXiQN0dM">
                 <span class="setlist-nr">04</span>
                 <div class="setlist-info">
                   <div class="setlist-title">Goldener (Bamberger) Reiter</div>
                   <span class="setlist-artist">Joachim Witt</span>
                 </div>
                 <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-              </a>
-              <a href="https://www.youtube.com/watch?v=XnMk4C2NuUc" class="setlist-item" target="_blank" rel="noopener">
+              </div>
+              <div class="setlist-item" data-yt="https://www.youtube.com/watch?v=XnMk4C2NuUc">
                 <span class="setlist-nr">05</span>
                 <div class="setlist-info">
                   <div class="setlist-title">Bella Ciao</div>
                   <span class="setlist-artist">-</span>
                 </div>
                 <div class="setlist-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-              </a>
+              </div>
             </div>
           </div>
         </div>
@@ -506,6 +554,14 @@
         <p class="modal-instrument" id="modal-instrument"></p>
         <p class="modal-bio" id="modal-bio"></p>
       </div>
+    </div>
+  </div>
+
+  <!-- ══ YOUTUBE POPUP ══ -->
+  <div class="yt-popup-overlay" id="yt-popup-overlay">
+    <div class="yt-popup" id="yt-popup">
+      <button class="yt-popup-close" id="yt-popup-close">&times;</button>
+      <iframe id="yt-popup-frame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
   </div>
 
@@ -858,6 +914,30 @@
     (function() {
       var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
       var list = document.getElementById('tour-list');
+      var pendingTourLink = '';
+      var linkOverlay = document.getElementById('link-confirm-overlay');
+      var linkOk = document.getElementById('link-confirm-ok');
+      if (linkOk) {
+        linkOk.addEventListener('click', function() {
+          if (pendingTourLink) window.open(pendingTourLink, '_blank');
+          linkOverlay.classList.remove('open');
+          pendingTourLink = '';
+        });
+      }
+      if (linkOverlay) {
+        linkOverlay.addEventListener('click', function(e) {
+          if (e.target === linkOverlay) {
+            linkOverlay.classList.remove('open');
+            pendingTourLink = '';
+          }
+        });
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && linkOverlay && linkOverlay.classList.contains('open')) {
+          linkOverlay.classList.remove('open');
+          pendingTourLink = '';
+        }
+      });
 
       function parseRows(csvText) {
         var lines = csvText.trim().split('\n');
@@ -879,7 +959,8 @@
             (function(href) {
               item.addEventListener('click', function(e) {
                 if (e.target.closest('a')) return;
-                window.open(href, '_blank');
+                pendingTourLink = href;
+                document.getElementById('link-confirm-overlay').classList.add('open');
               });
             })(linkHref);
           }
@@ -989,6 +1070,41 @@
       alert('Thanks for reaching out! We\'ll get back to you between tours. 🤘');
       contactOverlay.classList.remove('open');
     });
+
+    // ── YouTube popup ──
+    (function() {
+      var ytOverlay = document.getElementById('yt-popup-overlay');
+      var ytFrame = document.getElementById('yt-popup-frame');
+      var ytClose = document.getElementById('yt-popup-close');
+      if (!ytOverlay) return;
+
+      function extractId(url) {
+        var m = url.match(/[?&]v=([^&]+)/);
+        return m ? m[1] : null;
+      }
+
+      function closeYt() {
+        ytOverlay.classList.remove('open');
+        ytFrame.src = '';
+      }
+
+      document.querySelectorAll('.setlist-item[data-yt]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var id = extractId(el.getAttribute('data-yt'));
+          if (!id) return;
+          ytFrame.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
+          ytOverlay.classList.add('open');
+        });
+      });
+
+      if (ytClose) ytClose.addEventListener('click', closeYt);
+      ytOverlay.addEventListener('click', function(e) {
+        if (e.target === ytOverlay) closeYt();
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && ytOverlay.classList.contains('open')) closeYt();
+      });
+    })();
 
 
   </script>
