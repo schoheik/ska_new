@@ -116,6 +116,7 @@
       transition: color .2s;
     }
     .mobile-nav a:hover { color: #ef4444; }
+    .mobile-nav-extra { display: none; }
     .mobile-nav-close {
       position: absolute; top: 20px; right: 24px;
       background: none; border: none; color: #fff;
@@ -444,6 +445,8 @@
     @media (max-width: 768px) {
 
       .contact-layout { grid-template-columns: 1fr; }
+      .mobile-nav.nav-desktop { display: none; }
+      .mobile-nav-extra { display: flex; }
       .about-layout { display: flex; flex-direction: column; gap: 32px; }
       .about-middle { flex-direction: column; align-items: center; }
       .about-bug img { width: 140px; }
@@ -479,12 +482,21 @@
       <a href="https://www.instagram.com/skarabaeus.band/" target="_blank" rel="noopener" aria-label="Instagram"><img src="res/symbols/logo_insta.png" alt="Instagram"></a>
     </div>
   </header>
-  <nav class="mobile-nav" id="mobile-nav">
+  <nav class="mobile-nav nav-desktop" id="mobile-nav">
     <button class="mobile-nav-close" id="mobile-nav-close">&times;</button>
     <a href="#home">Home</a>
-    <a href="#tour">Tour</a>
-    <a href="#about">About</a>
+    <a href="#tour">Nächste Termine</a>
+    <a href="#about">Die Band</a>
     <a href="#contact">Kontakt</a>
+  </nav>
+  <nav class="mobile-nav mobile-nav-extra" id="mobile-nav-extra">
+    <button class="mobile-nav-close" id="mobile-nav-close-extra">&times;</button>
+    <a href="#home">Home</a>
+    <a href="#tour">Nächste Termine</a>
+    <a href="#about">Die Band</a>
+    <a href="#hoerproben">Hörproben</a>
+    <a href="#contact">Kontakt</a>
+    <a href="#downloads">Downloads</a>
   </nav>
 
   <!-- ══ HERO ══ -->
@@ -575,7 +587,7 @@
         </div>
         <div class="about-setlist">
           <div class="setlist">
-            <div class="setlist-heading"><span class="eq-icon"><span></span><span></span><span></span><span></span></span> Hörproben</div>
+            <div class="setlist-heading" id="hoerproben"><span class="eq-icon"><span></span><span></span><span></span><span></span></span> Hörproben</div>
             <div class="setlist-grid">
               <div class="setlist-item" data-yt="https://www.youtube.com/watch?v=tW6Y-y3x9Bw">
                 <span class="setlist-nr">01</span>
@@ -656,7 +668,7 @@
           <button class="contact-open-btn" id="contact-open-btn">Kontakt &rarr;</button>
         </div>
         <div class="contact-right">
-          <div class="downloads-heading">Downloads</div>
+          <div class="downloads-heading" id="downloads">Downloads</div>
           <div class="downloads-grid">
             <a href="doc/skarabaeus_press.zip" class="download-card" target="_blank">
               <span class="download-icon">&#128196;</span>
@@ -703,8 +715,19 @@
     (function() {
       var header = document.getElementById('site-header');
       var hamburger = document.getElementById('hamburger');
-      var mobileNav = document.getElementById('mobile-nav');
+      var desktopNav = document.getElementById('mobile-nav');
+      var extraNav = document.getElementById('mobile-nav-extra');
       var hero = document.getElementById('home');
+
+      function isMobile() { return window.matchMedia('(max-width: 768px)').matches; }
+
+      function getActiveNav() { return isMobile() ? extraNav : desktopNav; }
+
+      function closeAll() {
+        hamburger.classList.remove('open');
+        desktopNav.classList.remove('open');
+        extraNav.classList.remove('open');
+      }
 
       function updateHeader() {
         var heroBottom = hero.offsetTop + hero.offsetHeight;
@@ -718,20 +741,23 @@
       updateHeader();
 
       hamburger.addEventListener('click', function() {
-        hamburger.classList.toggle('open');
-        mobileNav.classList.toggle('open');
+        var active = getActiveNav();
+        var isOpen = active.classList.contains('open');
+        closeAll();
+        if (!isOpen) {
+          hamburger.classList.add('open');
+          active.classList.add('open');
+        }
       });
 
-      document.getElementById('mobile-nav-close').addEventListener('click', function() {
-        hamburger.classList.remove('open');
-        mobileNav.classList.remove('open');
-      });
+      document.getElementById('mobile-nav-close').addEventListener('click', closeAll);
+      document.getElementById('mobile-nav-close-extra').addEventListener('click', closeAll);
 
-      mobileNav.querySelectorAll('a').forEach(function(a) {
-        a.addEventListener('click', function() {
-          hamburger.classList.remove('open');
-          mobileNav.classList.remove('open');
-        });
+      desktopNav.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', closeAll);
+      });
+      extraNav.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', closeAll);
       });
     })();
 
