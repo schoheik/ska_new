@@ -345,7 +345,7 @@
     }
     .event-detail-overlay.open { display: flex; }
     .event-detail-box {
-      background: #141414; border: 1px solid #333; border-radius: 4px;
+      background: #141414; border: 2px solid #d4a017; border-radius: 4px;
       max-width: 90%; max-height: 90vh; width: 500px; padding: 0; position: relative; overflow: hidden;
     }
     .event-detail-close {
@@ -419,10 +419,15 @@
     }
     .modal-overlay.open { display: flex; }
     .modal {
-      background: #141414; border: 1px solid #333; border-radius: 8px;
+      background: #141414; border: 2px solid #d4a017; border-radius: 8px;
       max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto;
       display: grid; grid-template-columns: 1fr; position: relative;
     }
+    .modal-close {
+      position: absolute; top: 8px; right: 12px; background: none; border: none;
+      color: #888; font-size: 1.5rem; cursor: pointer; line-height: 1; z-index: 1;
+    }
+    .modal-close:hover { color: #ef4444; }
     .modal-photo { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
     .modal-info { padding: 24px; }
     .modal-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: #fff; }
@@ -738,6 +743,7 @@
   <!-- ══ MODAL ══ -->
   <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
     <div class="modal" id="modal" onclick="closeModal()">
+      <button class="modal-close" onclick="event.stopPropagation(); closeModal()">&times;</button>
       <img class="modal-photo" id="modal-photo" src="" alt="">
       <video class="modal-photo" id="modal-video" src="" muted autoplay playsinline style="display:none;"></video>
       <div class="modal-info">
