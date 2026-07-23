@@ -156,6 +156,13 @@
     .section-title {
       font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
       letter-spacing: 2px; color: #fff; margin-bottom: 16px; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+      width: 100%;
+    }
+    .section-title::before, .section-title::after {
+      content: ''; flex: 1; max-width: 60px; height: 1px;
+      background: #d4a017; display: block;
+      box-shadow: 0 0 12px rgba(212,160,23,.8), 0 0 24px rgba(212,160,23,.4);
     }
     .section-title .word-white { color: #fff; }
     .section-title .word-red { color: #ef4444; }
