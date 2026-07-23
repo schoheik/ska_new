@@ -473,7 +473,7 @@
       font-weight: 700; color: #d4a017; min-width: 80px; font-size: .9rem;
     }
     .contact-info-value {
-      color: #ccc; font-size: .9rem;
+      color: #fff; font-size: .9rem;
     }
     .contact-socials {
       display: flex; gap: 16px; margin-top: 24px; justify-content: center;
@@ -1042,17 +1042,7 @@
       if (!m) return;
       var img = document.getElementById('modal-photo');
       var vid = document.getElementById('modal-video');
-      if (m.id.toLowerCase() === 'stocki') {
-        img.style.display = 'none';
-        vid.style.display = 'block';
-        vid.src = 'res/images/members/stocki_animated.mp4';
-        vid.play();
-      } else {
-        img.style.display = 'block';
-        vid.style.display = 'none';
-        vid.pause();
-        img.src = m.photo;
-      }
+      img.src = m.photo;
       document.getElementById('modal-name').textContent = m.name;
       document.getElementById('modal-instrument').textContent = m.instrument;
       document.getElementById('modal-bio').innerHTML = m.bio;
