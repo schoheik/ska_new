@@ -317,10 +317,16 @@
     }
     .tour-popup-overlay.open { display: flex; }
     .tour-popup {
+      position: relative;
       background: #141414; border: 1px solid #333; border-radius: 4px;
       max-width: 95%; width: 700px; max-height: 85vh; overflow-y: auto;
       margin: 16px;
     }
+    .tour-popup-close {
+      position: absolute; top: 8px; right: 12px; background: none; border: none;
+      color: #888; font-size: 1.5rem; cursor: pointer; line-height: 1; z-index: 1;
+    }
+    .tour-popup-close:hover { color: #ef4444; }
     .tour-table { width: 100%; border-collapse: collapse; }
     .tour-table th {
       font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 2px;
@@ -328,7 +334,7 @@
       border-bottom: 1px solid #333; position: sticky; top: 0; background: #141414;
     }
     .tour-table td {
-      padding: 12px; border-bottom: 1px solid #1a1a1a; color: #ccc; font-size: .85rem;
+      padding: 12px; border-bottom: 1px solid #1a1a1a; color: #fff; font-size: .85rem;
     }
     .tour-table tr:hover td { background: #1a1a1a; }
 
@@ -614,6 +620,7 @@
   <!-- ══ TOUR POPUP ══ -->
   <div class="tour-popup-overlay" id="tour-popup-overlay">
     <div class="tour-popup" id="tour-popup">
+      <button class="tour-popup-close" id="tour-popup-close">&times;</button>
       <table class="tour-table" id="tour-table">
         <thead>
           <tr><th>Datum</th><th>Veranstaltung</th><th>Ort</th></tr>
@@ -1333,23 +1340,60 @@
       var tableBody = document.getElementById('tour-table-body');
       var overlay = document.getElementById('tour-popup-overlay');
       var allBtn = document.getElementById('tour-all-btn');
+      var tourClose = document.getElementById('tour-popup-close');
 
       if (tableBody && tourData) {
         var lines = tourData.trim().split('\n');
         for (var i = 1; i < lines.length; i++) {
           if (!lines[i].trim()) continue;
           var parts = lines[i].split(';');
-          var date = parts[0], location = parts[1], info = parts[2];
+          var date = parts[0], location = parts[1], info = parts[2], link = parts[3], flyer = parts[4];
           if (!date || !location || !info) continue;
           var tr = document.createElement('tr');
-          tr.innerHTML = '<td>' + date.trim() + '</td><td>' + info.trim() + '</td><td>' + location.trim() + '</td>';
+          var dm = date.trim().split('.');
+          var d = dm[0] ? dm[0].trim() : '', m = dm[1] ? dm[1].trim() : '', y = dm[2] ? dm[2].trim() : '';
+          var monthNames = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+          var mLabel = m && parseInt(m,10) >= 1 && parseInt(m,10) <= 12 ? monthNames[parseInt(m,10)-1] : m;
+          tr.innerHTML = '<td style="text-align:center;line-height:1.3"><div style="font-size:1.3rem;font-weight:700;color:#fff">' + d + '</div><div style="font-size:.7rem;color:#ef4444;text-transform:uppercase;letter-spacing:1px">' + mLabel + '</div><div style="font-size:.65rem;color:#d4a017">' + y + '</div></td><td>' + info.trim() + '</td><td>' + location.trim() + '</td>';
+          tr.style.cursor = 'pointer';
+          (function(date, location, info, link, flyer) {
+            tr.addEventListener('click', function() {
+              var dm = date.trim().split('.');
+              var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10), y = dm[2] || '';
+              var linkHref = link && link.trim() ? (link.indexOf('://') === -1 ? 'https://' + link : link) : '';
+              var flyerFile = flyer && flyer.trim() ? flyer.trim() : '';
+              eventDay.textContent = d;
+              eventMonth.textContent = months[m - 1];
+              eventYear.textContent = y;
+              eventTitle.textContent = info.trim();
+              eventLocation.textContent = location.trim();
+              if (flyerFile) {
+                eventImg.src = 'res/images/events/' + flyerFile;
+                eventImg.alt = info.trim();
+                eventImg.style.display = 'block';
+              } else {
+                eventImg.src = '';
+                eventImg.style.display = 'none';
+              }
+              if (linkHref) {
+                eventBtnWrap.innerHTML = '<a href="' + linkHref + '" target="_blank" rel="noopener" class="event-detail-btn">Zum Veranstalter</a>';
+              } else {
+                eventBtnWrap.innerHTML = '';
+              }
+              overlay.classList.remove('open');
+              eventOverlay.classList.add('open');
+            });
+          })(date, location, info, link, flyer);
           tableBody.appendChild(tr);
         }
       }
 
       if (allBtn && overlay) {
         allBtn.addEventListener('click', function() { overlay.classList.add('open'); });
-        overlay.addEventListener('click', function() { overlay.classList.remove('open'); });
+        overlay.addEventListener('click', function(e) {
+          if (e.target === overlay) overlay.classList.remove('open');
+        });
+        if (tourClose) tourClose.addEventListener('click', function() { overlay.classList.remove('open'); });
       }
     })();
 
