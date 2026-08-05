@@ -1076,10 +1076,16 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       document.body.style.overflow = 'hidden';
     }
 
+    var bringSlideLeft = null;
+
     function closeModal() {
       document.getElementById('modal-overlay').classList.remove('open');
       document.body.style.overflow = '';
       document.getElementById('modal-video').pause();
+      if (bringSlideLeft) {
+        bringSlideLeft();
+        bringSlideLeft = null;
+      }
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
@@ -1106,7 +1112,16 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
         var m = shuffled[idx];
         var slide = document.createElement('div');
         slide.className = 'carousel-slide';
-        slide.addEventListener('click', function() { openMember(m.id); });
+        slide.addEventListener('click', function() {
+          bringSlideLeft = function() {
+            if (!window.matchMedia('(max-width: 768px)').matches) return;
+            slideW = calcSlideW();
+            var k = Math.round((slide.offsetLeft - track.offsetLeft) / slideW);
+            pos = ((k % N) + N) % N * slideW;
+            updateTransform(true);
+          };
+          openMember(m.id);
+        });
         var img = document.createElement('img');
         img.src = m.photo;
         img.alt = m.name;
