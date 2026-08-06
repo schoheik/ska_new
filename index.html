@@ -305,12 +305,21 @@
     .tour-prev { left: 0; }
     .tour-next { right: 0; }
     .tour-all-btn {
+      position: relative; z-index: 0; overflow: hidden;
       padding: 12px 32px; background: transparent; border: 1.5px solid #d4a017;
       color: #fff; font-family: 'Inter', sans-serif; font-size: .85rem;
       font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-      cursor: pointer; transition: background .3s, color .3s;
+      cursor: pointer; transition: color .3s;
     }
-    .tour-all-btn:hover { background: #d4a017; color: #0a0a0a; }
+    .tour-all-btn::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: #d4a017;
+      transform: translateX(-101%);
+      transition: transform .35s ease;
+      z-index: -1;
+    }
+    .tour-all-btn:hover::before { transform: translateX(0); }
+    .tour-all-btn:hover { color: #0a0a0a; }
     .tour-popup-overlay {
       display: none; position: fixed; inset: 0; z-index: 200;
       background: rgba(0,0,0,.85); align-items: center; justify-content: center;
@@ -452,11 +461,20 @@
     .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
     .contact-left { display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; }
     .contact-open-btn {
+      position: relative; z-index: 0; overflow: hidden;
       padding: 14px 40px; background: transparent; border: 1.5px solid #d4a017;
       color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-      font-size: .85rem; cursor: pointer; transition: background .3s, color .3s;
+      font-size: .85rem; cursor: pointer; transition: color .3s;
     }
-    .contact-open-btn:hover { background: #d4a017; color: #0a0a0a; }
+    .contact-open-btn::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: #d4a017;
+      transform: translateX(-101%);
+      transition: transform .35s ease;
+      z-index: -1;
+    }
+    .contact-open-btn:hover::before { transform: translateX(0); }
+    .contact-open-btn:hover { color: #0a0a0a; }
     .contact-right { display: flex; flex-direction: column; gap: 16px; }
     .downloads-heading {
       font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
