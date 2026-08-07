@@ -558,6 +558,38 @@
       color: #999; font-size: .85rem; line-height: 1.7; margin-bottom: 10px;
     }
 
+    /* ── POPUP ANIMATION ── */
+    .tour-popup-overlay, .event-detail-overlay, .yt-popup-overlay,
+    .modal-overlay, .contact-popup-overlay, .footer-popup-overlay {
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .tour-popup-overlay.show, .event-detail-overlay.show, .yt-popup-overlay.show,
+    .modal-overlay.show, .contact-popup-overlay.show, .footer-popup-overlay.show {
+      opacity: 1;
+    }
+    .tour-popup, .event-detail-box, .modal, .yt-popup, .contact-popup, .footer-popup {
+      opacity: 0;
+      transform: translateY(56px) scale(.7);
+      transition: opacity .3s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+    }
+    .tour-popup-overlay.show .tour-popup,
+    .event-detail-overlay.show .event-detail-box,
+    .yt-popup-overlay.show .yt-popup,
+    .modal-overlay.show .modal,
+    .contact-popup-overlay.show .contact-popup,
+    .footer-popup-overlay.show .footer-popup {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .tour-popup-overlay, .event-detail-overlay, .yt-popup-overlay,
+      .modal-overlay, .contact-popup-overlay, .footer-popup-overlay,
+      .tour-popup, .event-detail-box, .modal, .yt-popup, .contact-popup, .footer-popup {
+        transition: none;
+      }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
 
@@ -1068,6 +1100,32 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       obs.observe(statsEl);
     })();
 
+    // ── Popup open/close animation ──
+    function popupOpen(overlay) {
+      overlay.classList.add('open');
+      void overlay.offsetWidth;
+      overlay.classList.add('show');
+    }
+
+    function popupClose(overlay, doneFn) {
+      if (!overlay.classList.contains('open')) { if (doneFn) doneFn(); return; }
+      overlay.classList.remove('show');
+      var finished = false;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        overlay.removeEventListener('transitionend', onEnd);
+        clearTimeout(timer);
+        if (!overlay.classList.contains('show')) overlay.classList.remove('open');
+        if (doneFn) doneFn();
+      }
+      function onEnd(e) {
+        if (e.target === overlay) finish();
+      }
+      var timer = setTimeout(finish, 600);
+      overlay.addEventListener('transitionend', onEnd);
+    }
+
     // ── Members ──
     const members = [
       {"id":"Heiko","name":"Heiko","instrument":"Gitarre, Gesang","photo":"res/images/members/heiko.JPG","bio":"<strong style=\"color:#d4a017\">Orchestermeister und Streber.</strong><br>Er ist im off-beat (Nachschlag!) eingefangen."},
@@ -1090,14 +1148,14 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       document.getElementById('modal-name').textContent = m.name;
       document.getElementById('modal-instrument').textContent = m.instrument;
       document.getElementById('modal-bio').innerHTML = m.bio;
-      document.getElementById('modal-overlay').classList.add('open');
+      popupOpen(document.getElementById('modal-overlay'));
       document.body.style.overflow = 'hidden';
     }
 
     var bringSlideLeft = null;
 
     function closeModal() {
-      document.getElementById('modal-overlay').classList.remove('open');
+      popupClose(document.getElementById('modal-overlay'));
       document.body.style.overflow = '';
       document.getElementById('modal-video').pause();
       if (bringSlideLeft) {
@@ -1262,7 +1320,9 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       var eventLocation = document.getElementById('event-detail-location');
       var eventBtnWrap = document.getElementById('event-detail-btn-wrap');
 
-      function closeEventDetail() { eventOverlay.classList.remove('open'); eventOverlay.classList.remove('img-full'); }
+      function closeEventDetail() {
+        popupClose(eventOverlay, function() { eventOverlay.classList.remove('img-full'); });
+      }
 
       if (eventImg) eventImg.addEventListener('click', function() {
         if (eventOverlay.classList.contains('open')) eventOverlay.classList.toggle('img-full');
@@ -1315,7 +1375,7 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
               } else {
                 eventBtnWrap.innerHTML = '';
               }
-              eventOverlay.classList.add('open');
+              popupOpen(eventOverlay);
             });
           })(d, m, y, info.trim(), location.trim(), linkHref, flyerFile);
           list.appendChild(item);
@@ -1434,8 +1494,8 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
               } else {
                 eventBtnWrap.innerHTML = '';
               }
-              overlay.classList.remove('open');
-              eventOverlay.classList.add('open');
+              popupClose(overlay);
+              popupOpen(eventOverlay);
             });
           })(date, location, info, link, flyer);
           tableBody.appendChild(tr);
@@ -1443,11 +1503,11 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       }
 
       if (allBtn && overlay) {
-        allBtn.addEventListener('click', function() { overlay.classList.add('open'); });
+        allBtn.addEventListener('click', function() { popupOpen(overlay); });
         overlay.addEventListener('click', function(e) {
-          if (e.target === overlay) overlay.classList.remove('open');
+          if (e.target === overlay) popupClose(overlay);
         });
-        if (tourClose) tourClose.addEventListener('click', function() { overlay.classList.remove('open'); });
+        if (tourClose) tourClose.addEventListener('click', function() { popupClose(overlay); });
       }
     })();
 
@@ -1456,12 +1516,12 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
     var contactOverlay = document.getElementById('contact-popup-overlay');
     var contactClose = document.getElementById('contact-popup-close');
     if (contactOpenBtn && contactOverlay) {
-      contactOpenBtn.addEventListener('click', function() { contactOverlay.classList.add('open'); });
+      contactOpenBtn.addEventListener('click', function() { popupOpen(contactOverlay); });
       contactOverlay.addEventListener('click', function(e) {
-        if (e.target === contactOverlay) contactOverlay.classList.remove('open');
+        if (e.target === contactOverlay) popupClose(contactOverlay);
       });
     }
-    if (contactClose) contactClose.addEventListener('click', function() { contactOverlay.classList.remove('open'); });
+    if (contactClose) contactClose.addEventListener('click', function() { popupClose(contactOverlay); });
 
     // ── YouTube popup ──
     (function() {
@@ -1476,8 +1536,7 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       }
 
       function closeYt() {
-        ytOverlay.classList.remove('open');
-        ytFrame.src = '';
+        popupClose(ytOverlay, function() { ytFrame.src = ''; });
       }
 
       document.querySelectorAll('.setlist-item[data-yt]').forEach(function(el) {
@@ -1485,7 +1544,7 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
           var id = extractId(el.getAttribute('data-yt'));
           if (!id) return;
           ytFrame.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
-          ytOverlay.classList.add('open');
+          popupOpen(ytOverlay);
         });
       });
 
@@ -1505,17 +1564,17 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
         var overlay = document.getElementById(overlayId);
         var close = document.getElementById(closeId);
         if (!link || !overlay) return;
-        link.addEventListener('click', function() { overlay.classList.add('open'); });
-        if (close) close.addEventListener('click', function() { overlay.classList.remove('open'); });
+        link.addEventListener('click', function() { popupOpen(overlay); });
+        if (close) close.addEventListener('click', function() { popupClose(overlay); });
         overlay.addEventListener('click', function(e) {
-          if (e.target === overlay) overlay.classList.remove('open');
+          if (e.target === overlay) popupClose(overlay);
         });
       }
       setupFooterPopup('agb-link', 'agb-popup-overlay', 'agb-popup-close');
       setupFooterPopup('haftung-link', 'haftung-popup-overlay', 'haftung-popup-close');
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-          document.querySelectorAll('.footer-popup-overlay.open').forEach(function(o) { o.classList.remove('open'); });
+          document.querySelectorAll('.footer-popup-overlay.open').forEach(function(o) { popupClose(o); });
         }
       });
     })();
