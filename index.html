@@ -1520,6 +1520,38 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       });
     })();
 
+    // ── Fit popups to screen ──
+    (function() {
+      var boxes = [
+        document.querySelector('.tour-popup'),
+        document.querySelector('.event-detail-box'),
+        document.querySelector('.modal'),
+        document.querySelector('.yt-popup'),
+        document.querySelector('.contact-popup')
+      ].concat(Array.prototype.slice.call(document.querySelectorAll('.footer-popup')));
+      boxes = boxes.filter(function(b) { return !!b; }).map(function(b) {
+        return { box: b, overlay: b.parentElement };
+      });
+
+      function fit(item) {
+        if (!item.overlay || !item.overlay.classList.contains('open')) return;
+        if (item.overlay.classList.contains('img-full')) return;
+        item.box.style.zoom = '';
+        var availW = window.innerWidth - 32;
+        var availH = window.innerHeight - 32;
+        var s = Math.min(1, availW / item.box.offsetWidth, availH / item.box.offsetHeight);
+        if (s < 1) item.box.style.zoom = s;
+      }
+
+      function fitAll() { boxes.forEach(fit); }
+
+      var obs = new MutationObserver(fitAll);
+      boxes.forEach(function(item) {
+        obs.observe(item.overlay, { attributes: true, attributeFilter: ['class'] });
+      });
+      window.addEventListener('resize', fitAll);
+      window.addEventListener('orientationchange', function() { setTimeout(fitAll, 150); });
+    })();
 
   </script>
 
