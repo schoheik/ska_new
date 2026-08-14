@@ -311,7 +311,7 @@
     .tour-scroll-hint { display: none; }
     .tour-list { display: flex; gap: 16px; will-change: transform; }
     .tour-item {
-      flex: 0 0 auto; min-width: 280px; box-sizing: border-box;
+      flex: 0 0 420px; min-width: 0; box-sizing: border-box;
       background: #080808; border: 2px solid #3a3220; border-radius: 4px;
       display: grid; grid-template-columns: auto 1fr; gap: 16px;
       padding: 20px; cursor: pointer; transition: border-color .3s, transform .3s;
@@ -642,7 +642,7 @@
       .tour-scroll-hint span { font-size: 1.6rem; color: #d4a017; animation: hintPulse 1.5s ease-in-out infinite; }
       @keyframes hintPulse { 0%,100% { opacity: 1; transform: translateX(0); } 50% { opacity: .4; transform: translateX(4px); } }
       .tour-btn { display: none; }
-      .tour-item { flex: 0 0 auto; min-width: 160px; padding: 24px 12px; gap: 14px; }
+      .tour-item { flex: 0 0 280px; min-width: 0; padding: 24px 12px; gap: 14px; }
       .tour-date { font-size: 2.2rem; padding-right: 12px; line-height: 1; }
       .tour-date .month { font-size: .8rem; }
       .tour-venue h4 { font-size: 1.1rem; }
