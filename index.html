@@ -311,7 +311,7 @@
     .tour-scroll-hint { display: none; }
     .tour-list { display: flex; gap: 16px; will-change: transform; }
     .tour-item {
-      flex: 0 0 480px; min-width: 0; box-sizing: border-box;
+      flex: 0 0 480px; min-width: 0; max-width: 100%; box-sizing: border-box;
       --date-size: 3.5rem; --month-size: 1.4rem; --year-size: .65rem;
       background: #080808; border: 2px solid #3a3220; border-radius: 4px;
       display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto;
@@ -330,8 +330,8 @@
     .tour-date .year { font-size: var(--year-size); font-family: 'Inter', sans-serif; font-weight: 600; color: #ef4444; letter-spacing: 1px; }
     .tour-venue { grid-column: 2; grid-row: 1 / 4; display: grid; grid-template-rows: subgrid; align-items: start; min-width: 0; }
     .tour-venue h4 { font-family: 'Boogaloo', cursive; font-weight: 400; color: #fff; font-size: calc(var(--date-size) * .765); line-height: 1; overflow-wrap: anywhere; }
-    .tour-venue .tour-location { font-family: 'Inter', sans-serif; font-weight: 700; font-size: var(--month-size); color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1; display: block; white-space: normal; }
-    .tour-venue .tour-address { font-family: 'Inter', sans-serif; font-weight: 600; font-size: var(--year-size); letter-spacing: 1px; color: #ef4444; display: block; white-space: normal; line-height: 1.4; }
+    .tour-venue .tour-location { font-family: 'Inter', sans-serif; font-weight: 700; font-size: var(--month-size); color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1; display: block; white-space: normal; overflow-wrap: anywhere; }
+    .tour-venue .tour-address { font-family: 'Inter', sans-serif; font-weight: 600; font-size: var(--year-size); letter-spacing: 1px; color: #ef4444; display: block; white-space: normal; overflow-wrap: anywhere; line-height: 1.4; }
     .tour-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       background: rgba(0,0,0,0.6); border: none; color: #fff;
@@ -409,6 +409,7 @@
     .event-detail-overlay.open { display: flex; }
     .event-detail-box {
       --date-size: 3.5rem; --month-size: 1.4rem; --year-size: .65rem;
+      box-sizing: border-box;
       background: #141414; border: 2px solid #d4a017; border-radius: 4px;
       max-width: 90%; max-height: 90vh; width: 500px; padding: 0; position: relative; overflow: hidden;
     }
@@ -463,10 +464,11 @@
     .event-detail-venue .event-detail-location {
       font-family: 'Inter', sans-serif; font-weight: 700; font-size: var(--month-size);
       color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1;
+      overflow-wrap: anywhere;
     }
     .event-detail-venue .event-detail-address {
       font-family: 'Inter', sans-serif; font-weight: 600; font-size: var(--year-size); letter-spacing: 1px;
-      color: #ef4444; display: none; line-height: 1.4;
+      color: #ef4444; display: none; line-height: 1.4; overflow-wrap: anywhere;
     }
     .event-detail-btn-row {
       display: flex; flex-wrap: wrap; gap: 12px; padding: 0 20px 20px;
