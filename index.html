@@ -26,15 +26,11 @@
 
     /* ── HERO ── */
     .hero {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; position: relative; overflow: hidden;
-      background: #0a0a0a;
+      display: block; position: relative; overflow: hidden; padding: 0;
+      text-align: center; background: #0a0a0a;
     }
     .hero-bg {
-      position: absolute; inset: 0; z-index: 0;
-      background: url('res/images/mobil_stairs.JPG') center/cover no-repeat;
-      background-position: center 10%;
-      opacity: .5;
+      display: block; width: 100%; height: auto;
     }
 
     .hero::after {
@@ -43,11 +39,6 @@
       pointer-events: none;
     }
     .hero-content { position: relative; z-index: 1; }
-    .hero-logo {
-      max-width: min(90vw, 700px); height: auto;
-      display: block; margin: 0 auto;
-      transform: translateY(-10%);
-    }
 
     .scroll-hint {
       position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
@@ -728,9 +719,8 @@
 
   <!-- ══ HERO ══ -->
   <section class="hero" id="home">
-    <div class="hero-bg"></div>
+    <img class="hero-bg" src="res/images/Hero_Ralf.jpeg" alt="Skarabäus live">
     <div class="hero-content">
-      <img src="res/logo/Logo_no_background.png" alt="Skarabäus" class="hero-logo">
       <div class="hero-links">
         <a href="#tour" class="stadium-link">Tour</a>
         <a href="#about" class="stadium-link">About</a>
@@ -1061,20 +1051,6 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       extraNav.querySelectorAll('a').forEach(function(a) {
         a.addEventListener('click', closeAll);
       });
-    })();
-
-    // ── Random mobile hero background ──
-    (function() {
-      if (window.matchMedia('(max-width: 768px)').matches) {
-        var images = [
-          { src: 'res/images/mobil_stairs.JPG', pos: 'center 10%' },
-          { src: 'res/images/mobil_green.JPG',  pos: 'center 50%' }
-        ];
-        var pick = images[Math.floor(Math.random() * images.length)];
-        var bg = document.querySelector('.hero-bg');
-        bg.style.backgroundImage = 'url("' + pick.src + '")';
-        bg.style.backgroundPosition = pick.pos;
-      }
     })();
 
     // ── Smooth reveal on scroll ──
