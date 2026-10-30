@@ -311,24 +311,27 @@
     .tour-scroll-hint { display: none; }
     .tour-list { display: flex; gap: 16px; will-change: transform; }
     .tour-item {
-      flex: 0 0 420px; min-width: 0; box-sizing: border-box;
+      flex: 0 0 480px; min-width: 0; box-sizing: border-box;
+      --date-size: 3.5rem; --month-size: 1.4rem; --year-size: .65rem;
       background: #080808; border: 2px solid #3a3220; border-radius: 4px;
-      display: grid; grid-template-columns: auto 1fr; gap: 16px;
+      display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto;
+      column-gap: 16px; row-gap: 6px;
       padding: 20px; cursor: pointer; transition: border-color .3s, transform .3s;
     }
     .tour-item:hover { border-color: #d4a017; transform: translateY(-4px); }
     .tour-item.active { border-color: #ef4444; }
     .tour-date {
-      font-family: 'Boogaloo', cursive; font-size: 3.5rem; color: #fff;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      font-family: 'Boogaloo', cursive; font-size: var(--date-size); color: #fff;
+      grid-column: 1; grid-row: 1 / 4;
+      display: grid; grid-template-rows: subgrid; justify-items: center; align-items: start;
       border-right: 1px solid #3a3220; padding-right: 16px; line-height: 1;
     }
-    .tour-date .month { font-size: 1.4rem; font-family: 'Inter', sans-serif; font-weight: 700; color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; line-height: 1; }
-    .tour-date .year { font-size: .65rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #d4a017; letter-spacing: 1px; margin-top: 8px; }
-    .tour-venue { display: flex; flex-direction: column; justify-content: center; }
-    .tour-venue h4 { font-weight: 700; color: #fff; font-size: 1.6rem; white-space: nowrap; }
-    .tour-venue span { font-size: .9rem; color: #d4a017; margin-top: 4px; display: block; white-space: nowrap; }
-    .tour-venue a { display: inline-block; margin-top: 8px; font-size: .8rem; color: #ef4444; }
+    .tour-date .month { font-size: var(--month-size); font-family: 'Inter', sans-serif; font-weight: 700; color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
+    .tour-date .year { font-size: var(--year-size); font-family: 'Inter', sans-serif; font-weight: 600; color: #ef4444; letter-spacing: 1px; }
+    .tour-venue { grid-column: 2; grid-row: 1 / 4; display: grid; grid-template-rows: subgrid; align-items: start; min-width: 0; }
+    .tour-venue h4 { font-family: 'Boogaloo', cursive; font-weight: 400; color: #fff; font-size: calc(var(--date-size) * .765); line-height: 1; overflow-wrap: anywhere; }
+    .tour-venue .tour-location { font-family: 'Inter', sans-serif; font-weight: 700; font-size: var(--month-size); color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1; display: block; white-space: normal; }
+    .tour-venue .tour-address { font-family: 'Inter', sans-serif; font-weight: 600; font-size: var(--year-size); letter-spacing: 1px; color: #ef4444; display: block; white-space: normal; line-height: 1.4; }
     .tour-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       background: rgba(0,0,0,0.6); border: none; color: #fff;
@@ -386,6 +389,16 @@
     .tour-table td {
       padding: 12px; border-bottom: 1px solid #3a3220; color: #fff; font-size: .85rem;
     }
+    .tour-table th.tour-table-maps-head,
+    .tour-table td.tour-table-maps-cell { text-align: right; white-space: nowrap; }
+    .tour-table-maps {
+      display: inline-block; padding: 6px 14px;
+      background: #ef4444; color: #fff;
+      font-family: 'Inter', sans-serif; font-weight: 700;
+      font-size: .7rem; letter-spacing: 1px; text-transform: uppercase;
+      text-decoration: none; border-radius: 2px; transition: opacity .3s;
+    }
+    .tour-table-maps:hover { opacity: .8; color: #fff; }
     .tour-table tr:hover td { background: #1a1a1a; }
 
     /* ── EVENT DETAIL POPUP ── */
@@ -395,6 +408,7 @@
     }
     .event-detail-overlay.open { display: flex; }
     .event-detail-box {
+      --date-size: 3.5rem; --month-size: 1.4rem; --year-size: .65rem;
       background: #141414; border: 2px solid #d4a017; border-radius: 4px;
       max-width: 90%; max-height: 90vh; width: 500px; padding: 0; position: relative; overflow: hidden;
     }
@@ -421,31 +435,43 @@
     .event-detail-overlay.img-full .event-detail-content,
     .event-detail-overlay.img-full #event-detail-btn-wrap { display: none; }
     .event-detail-content {
-      display: grid; grid-template-columns: 1fr 2fr; gap: 16px;
+      display: grid; grid-template-columns: 1fr 2fr; grid-template-rows: auto auto auto;
+      column-gap: 16px; row-gap: 6px;
       padding: 20px;
     }
     .event-detail-date {
-      font-family: 'Boogaloo', cursive; font-size: 3.5rem; color: #fff;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      font-family: 'Boogaloo', cursive; font-size: var(--date-size); color: #fff;
+      grid-column: 1; grid-row: 1 / 4;
+      display: grid; grid-template-rows: subgrid; justify-items: center; align-items: start;
       border-right: 1px solid #222; padding-right: 16px; line-height: 1;
     }
     .event-detail-date .month {
-      font-size: 1.4rem; font-family: 'Inter', sans-serif; font-weight: 700;
-      color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px; line-height: 1;
+      font-size: var(--month-size); font-family: 'Inter', sans-serif; font-weight: 700;
+      color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1;
     }
     .event-detail-date .year {
-      font-size: .65rem; font-family: 'Inter', sans-serif; font-weight: 600;
-      color: #d4a017; letter-spacing: 1px; margin-top: 8px;
+      font-size: var(--year-size); font-family: 'Inter', sans-serif; font-weight: 600;
+      color: #ef4444; letter-spacing: 1px;
     }
     .event-detail-venue {
-      display: flex; flex-direction: column; justify-content: center;
+      grid-column: 2; grid-row: 1 / 4;
+      display: grid; grid-template-rows: subgrid; align-items: start; min-width: 0;
     }
     .event-detail-venue h4 {
-      font-weight: 700; color: #fff; font-size: 1.4rem; margin-bottom: 4px;
+      font-family: 'Boogaloo', cursive; font-weight: 400; color: #fff; font-size: var(--date-size); line-height: 1; overflow-wrap: anywhere;
     }
     .event-detail-venue .event-detail-location {
-      font-size: .9rem; color: #d4a017;
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: var(--month-size);
+      color: #d4a017; text-transform: uppercase; letter-spacing: 1px; line-height: 1;
     }
+    .event-detail-venue .event-detail-address {
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: var(--year-size); letter-spacing: 1px;
+      color: #ef4444; display: none; line-height: 1.4;
+    }
+    .event-detail-btn-row {
+      display: flex; flex-wrap: wrap; gap: 12px; padding: 0 20px 20px;
+    }
+    .event-detail-btn-row .event-detail-btn { margin-top: 0; }
     .event-detail-btn {
       display: inline-block; margin-top: 4px; padding: 12px 32px;
       background: #ef4444; border: none; color: #fff;
@@ -656,12 +682,8 @@
       .tour-scroll-hint span { font-size: 1.6rem; color: #d4a017; animation: hintPulse 1.5s ease-in-out infinite; }
       @keyframes hintPulse { 0%,100% { opacity: 1; transform: translateX(0); } 50% { opacity: .4; transform: translateX(4px); } }
       .tour-btn { display: none; }
-      .tour-item { flex: 0 0 280px; min-width: 0; padding: 24px 12px; gap: 14px; }
-      .tour-date { font-size: 2.2rem; padding-right: 12px; line-height: 1; }
-      .tour-date .month { font-size: .8rem; }
-      .tour-venue h4 { font-size: 1.1rem; }
-      .tour-venue span { font-size: .9rem; }
-      .tour-venue a { font-size: .9rem; }
+      .tour-item { flex: 0 0 320px; min-width: 0; padding: 24px 12px; gap: 14px; --date-size: 2.2rem; --month-size: .8rem; }
+      .tour-date { padding-right: 12px; line-height: 1; }
     .about-text-content p { font-size: 1.35rem; }
       .about-stats { grid-template-columns: repeat(3, 1fr); }
       .carousel-slide { flex: 0 0 calc(75% - 8px); }
@@ -741,7 +763,7 @@
       <button class="tour-popup-close" id="tour-popup-close">&times;</button>
       <table class="tour-table" id="tour-table">
         <thead>
-          <tr><th>Datum</th><th>Veranstaltung</th><th>Ort</th></tr>
+          <tr><th>Datum</th><th>Veranstaltung</th><th>Ort</th><th class="tour-table-maps-head">Maps</th></tr>
         </thead>
         <tbody id="tour-table-body"></tbody>
       </table>
@@ -762,9 +784,13 @@
         <div class="event-detail-venue">
           <h4 id="event-detail-title"></h4>
           <span class="event-detail-location" id="event-detail-location"></span>
+          <span class="event-detail-address" id="event-detail-address"></span>
         </div>
       </div>
-      <div id="event-detail-btn-wrap" style="padding: 0 20px 20px;"></div>
+      <div class="event-detail-btn-row" id="event-detail-btn-wrap">
+        <a class="event-detail-btn" id="event-detail-maps" href="#" target="_blank" rel="noopener">Google Maps</a>
+        <a class="event-detail-btn" id="event-detail-link" href="#" target="_blank" rel="noopener" style="display:none">Zum Veranstalter</a>
+      </div>
     </div>
   </div>
 
@@ -1369,7 +1395,118 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
       var eventYear = document.getElementById('event-detail-year');
       var eventTitle = document.getElementById('event-detail-title');
       var eventLocation = document.getElementById('event-detail-location');
-      var eventBtnWrap = document.getElementById('event-detail-btn-wrap');
+      var eventAddress = document.getElementById('event-detail-address');
+      var eventMaps = document.getElementById('event-detail-maps');
+      var eventLink = document.getElementById('event-detail-link');
+
+      function escHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      }
+
+      function normUrl(url) {
+        url = (url || '').trim();
+        if (!url) return '';
+        return /^https?:\/\//i.test(url) ? url : 'https://' + url;
+      }
+
+      // Column layout comes from the header row: Date;Title;Location;Adress;Mapslink;Link;Flyer
+      // Reading by header name keeps renamed or reordered columns working.
+      var tourCols = (tourData.split('\n')[0] || '').split(';').map(function(h) {
+        return h.trim().toLowerCase();
+      });
+      function tourCol(names) {
+        for (var i = 0; i < names.length; i++) {
+          var idx = tourCols.indexOf(names[i]);
+          if (idx !== -1) return idx;
+        }
+        return -1;
+      }
+      var tourIdx = {
+        date: tourCol(['date', 'datum']),
+        title: tourCol(['title', 'titel', 'info']),
+        location: tourCol(['location', 'ort', 'venue']),
+        address: tourCol(['adress', 'address']),
+        maps: tourCol(['mapslink', 'maps', 'map', 'route']),
+        link: tourCol(['link', 'url', 'website']),
+        flyer: tourCol(['flyer', 'bild', 'image'])
+      };
+
+      function parseTourRow(rawParts) {
+        var parts = rawParts.map(function(p) { return (p || '').trim(); });
+        function at(idx) { return idx >= 0 ? (parts[idx] || '') : ''; }
+        var row = {
+          date: at(tourIdx.date) || parts[0] || '',
+          title: at(tourIdx.title),
+          location: at(tourIdx.location),
+          address: at(tourIdx.address),
+          maps: at(tourIdx.maps),
+          link: at(tourIdx.link),
+          flyer: at(tourIdx.flyer)
+        };
+
+        var isMaps = function(v) { return /^https?:\/\//i.test(v) && /(goo\.gl|maps\.app|google\.[a-z.]+\/maps|maps\.google)/i.test(v); };
+        var isUrl = function(v) { return /^https?:\/\//i.test(v) || /^www\./i.test(v); };
+        var isImage = function(v) { return /\.(jpe?g|png|gif|webp|svg)$/i.test(v); };
+
+        // Fallback: classify any cell outside the known columns by content,
+        // so slightly reordered rows still render correctly.
+        var known = [];
+        Object.keys(tourIdx).forEach(function(k) { if (tourIdx[k] >= 0) known.push(tourIdx[k]); });
+        parts.forEach(function(v, i) {
+          if (v === '' || known.indexOf(i) !== -1) return;
+          if (!row.maps && isMaps(v)) { row.maps = v; return; }
+          if (!row.flyer && isImage(v)) { row.flyer = v; return; }
+          if (isUrl(v)) { if (!row.link) row.link = v; return; }
+          if (!row.address && /\b\d{4,5}\b/.test(v)) { row.address = v; return; }
+          if (!row.title) row.title = v;
+        });
+
+        row.maps = normUrl(row.maps);
+        row.link = normUrl(row.link);
+        return row;
+      }
+
+      function openEventDetail(row) {
+        var dm = row.date.split('.');
+        var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10), y = dm[2] || '';
+        eventDay.textContent = d;
+        eventMonth.textContent = months[m - 1];
+        eventYear.textContent = y;
+        eventTitle.textContent = row.title || row.location;
+        eventLocation.textContent = row.location;
+        if (row.address) {
+          eventAddress.textContent = row.address;
+          eventAddress.style.display = 'block';
+        } else {
+          eventAddress.textContent = '';
+          eventAddress.style.display = 'none';
+        }
+        if (row.maps) {
+          eventMaps.href = row.maps;
+          eventMaps.style.display = 'inline-block';
+        } else {
+          eventMaps.removeAttribute('href');
+          eventMaps.style.display = 'none';
+        }
+        if (row.link) {
+          eventLink.href = row.link;
+          eventLink.style.display = 'inline-block';
+        } else {
+          eventLink.removeAttribute('href');
+          eventLink.style.display = 'none';
+        }
+        if (row.flyer) {
+          eventImg.src = 'res/images/events/' + row.flyer;
+          eventImg.alt = row.title || row.location;
+          eventImg.style.display = 'block';
+        } else {
+          eventImg.src = '';
+          eventImg.style.display = 'none';
+        }
+        popupOpen(eventOverlay);
+      }
 
       function closeEventDetail() {
         popupClose(eventOverlay, function() { eventOverlay.classList.remove('img-full'); });
@@ -1391,44 +1528,27 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
         var lines = csvText.trim().split('\n');
         for (var i = 1; i < lines.length; i++) {
           if (!lines[i].trim()) continue;
-          var parts = lines[i].split(';');
-          var date = parts[0], location = parts[1], info = parts[2], link = parts[3], flyer = parts[4];
-          if (!date || !location || !info) continue;
-          var dm = date.trim().split('.');
+          var row = parseTourRow(lines[i].split(';'));
+          if (!row.date || !row.location) continue;
+          var dm = row.date.split('.');
           var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10), y = dm[2] || '';
           if (y && new Date(parseInt(y, 10), m - 1, d, 23, 59, 59) < new Date()) continue;
-          var linkHref = link && link.trim() ? (link.indexOf('://') === -1 ? 'https://' + link : link) : '';
-          var flyerFile = flyer && flyer.trim() ? flyer.trim() : '';
           var item = document.createElement('div');
           item.className = 'tour-item';
+          var addressHtml = '';
+          if (row.address) {
+            addressHtml = '<span class="tour-address">' + escHtml(row.address) + '</span>';
+          }
           item.innerHTML =
-            '<div class="tour-date">' + d + '<span class="month">' + months[m - 1] + '</span><span class="year">' + y + '</span></div>' +
-            '<div class="tour-venue"><h4>' + info.trim() + '</h4><span>' + location.trim() + '</span>' +
+            '<div class="tour-date"><span class="day">' + d + '</span><span class="month">' + months[m - 1] + '</span><span class="year">' + y + '</span></div>' +
+            '<div class="tour-venue"><h4>' + escHtml(row.title || row.location) + '</h4><span class="tour-location">' + escHtml(row.location) + '</span>' +
+            addressHtml +
             '</div>';
-          (function(d, m, y, infoText, locText, href, imgFile) {
-            item.addEventListener('click', function(e) {
-              if (e.target.closest('a')) return;
-              eventDay.textContent = d;
-              eventMonth.textContent = months[m - 1];
-              eventYear.textContent = y;
-              eventTitle.textContent = infoText;
-              eventLocation.textContent = locText;
-              if (imgFile) {
-                eventImg.src = 'res/images/events/' + imgFile;
-                eventImg.alt = infoText;
-                eventImg.style.display = 'block';
-              } else {
-                eventImg.src = '';
-                eventImg.style.display = 'none';
-              }
-              if (href) {
-                eventBtnWrap.innerHTML = '<a href="' + href + '" target="_blank" rel="noopener" class="event-detail-btn">Zum Veranstalter</a>';
-              } else {
-                eventBtnWrap.innerHTML = '';
-              }
-              popupOpen(eventOverlay);
+          (function(row) {
+            item.addEventListener('click', function() {
+              openEventDetail(row);
             });
-          })(d, m, y, info.trim(), location.trim(), linkHref, flyerFile);
+          })(row);
           list.appendChild(item);
           observeEl(item);
         }
@@ -1511,44 +1631,29 @@ Das Copyright für veröffentlichte, selbst erstellte Objekte bleibt allein bei 
         var lines = tourData.trim().split('\n');
         for (var i = 1; i < lines.length; i++) {
           if (!lines[i].trim()) continue;
-          var parts = lines[i].split(';');
-          var date = parts[0], location = parts[1], info = parts[2], link = parts[3], flyer = parts[4];
-          if (!date || !location || !info) continue;
+          var row = parseTourRow(lines[i].split(';'));
+          if (!row.date || !row.location) continue;
           var tr = document.createElement('tr');
-          var dm = date.trim().split('.');
+          var dm = row.date.split('.');
           var d = dm[0] ? dm[0].trim() : '', m = dm[1] ? dm[1].trim() : '', y = dm[2] ? dm[2].trim() : '';
           var monthNames = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
           var mLabel = m && parseInt(m,10) >= 1 && parseInt(m,10) <= 12 ? monthNames[parseInt(m,10)-1] : m;
-          tr.innerHTML = '<td style="text-align:center;line-height:1.3"><div style="font-size:1.3rem;font-weight:700;color:#fff">' + d + '</div><div style="font-size:.7rem;color:#ef4444;text-transform:uppercase;letter-spacing:1px">' + mLabel + '</div><div style="font-size:.65rem;color:#d4a017">' + y + '</div></td><td>' + info.trim() + '</td><td>' + location.trim() + '</td>';
+          var ortHtml = escHtml(row.location);
+          if (row.address) {
+            ortHtml += '<br><span style="color:#888;font-size:.75rem">' + escHtml(row.address) + '</span>';
+          }
+          var mapsCell = row.maps
+            ? '<td class="tour-table-maps-cell"><a class="tour-table-maps" href="' + escHtml(row.maps) + '" target="_blank" rel="noopener">Maps</a></td>'
+            : '<td class="tour-table-maps-cell"></td>';
+          tr.innerHTML = '<td style="text-align:center;line-height:1.3"><div style="font-size:1.3rem;font-weight:700;color:#fff">' + d + '</div><div style="font-size:.7rem;color:#ef4444;text-transform:uppercase;letter-spacing:1px">' + mLabel + '</div><div style="font-size:.65rem;color:#d4a017">' + y + '</div></td><td>' + escHtml(row.title || row.location) + '</td><td>' + ortHtml + '</td>' + mapsCell;
           tr.style.cursor = 'pointer';
-          (function(date, location, info, link, flyer) {
-            tr.addEventListener('click', function() {
-              var dm = date.trim().split('.');
-              var d = parseInt(dm[0], 10), m = parseInt(dm[1], 10), y = dm[2] || '';
-              var linkHref = link && link.trim() ? (link.indexOf('://') === -1 ? 'https://' + link : link) : '';
-              var flyerFile = flyer && flyer.trim() ? flyer.trim() : '';
-              eventDay.textContent = d;
-              eventMonth.textContent = months[m - 1];
-              eventYear.textContent = y;
-              eventTitle.textContent = info.trim();
-              eventLocation.textContent = location.trim();
-              if (flyerFile) {
-                eventImg.src = 'res/images/events/' + flyerFile;
-                eventImg.alt = info.trim();
-                eventImg.style.display = 'block';
-              } else {
-                eventImg.src = '';
-                eventImg.style.display = 'none';
-              }
-              if (linkHref) {
-                eventBtnWrap.innerHTML = '<a href="' + linkHref + '" target="_blank" rel="noopener" class="event-detail-btn">Zum Veranstalter</a>';
-              } else {
-                eventBtnWrap.innerHTML = '';
-              }
+          (function(row) {
+            tr.addEventListener('click', function(e) {
+              if (e.target.closest('a')) return;
               popupClose(overlay);
-              popupOpen(eventOverlay);
+              openEventDetail(row);
             });
-          })(date, location, info, link, flyer);
+          })(row);
           tableBody.appendChild(tr);
         }
       }
